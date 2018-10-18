@@ -66,4 +66,9 @@ class AuthController extends Controller
         }
     }
 
+    public function profile(Request $request)
+    {
+
+    }
+
 }
