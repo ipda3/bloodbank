@@ -10,15 +10,21 @@ class City extends Model
     protected $table = 'cities';
     public $timestamps = true;
     protected $fillable = array('name', 'governorate_id');
+    protected $with = array('governorate');
 
-    public function city_client()
+    public function clients()
     {
-        return $this->hasMany('Client');
+        return $this->belongsToMany(Client::class);
     }
 
-    public function city_donation()
+    public function donation()
     {
-        return $this->hasMany('DonationRequest');
+        return $this->hasMany(DonationRequest::class);
+    }
+
+    public function governorate()
+    {
+        return $this->belongsTo(Governorate::class);
     }
 
 }

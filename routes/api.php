@@ -25,6 +25,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'],function (){
 
     Route::group(['middleware'=> 'auth:api'],function (){
         Route::get('posts','MainController@posts');
+        Route::get('donation-requests','MainController@donationRequests');
+        Route::get('post','MainController@post');
+        Route::get('donation-request','MainController@donationRequest');
+        Route::post('donation-request/create','MainController@donationRequestCreate');
     });
 });
 

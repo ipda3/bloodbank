@@ -113,6 +113,7 @@
                         <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Categories</a></li>
                     </ul>
                 </li>
+                <li><a href="{{url(route('governorate.index'))}}"><i class="fa fa-list"></i> <span>Governorates</span></a></li>
                 <li><a href="https://adminlte.io/docs"><i class="fa fa-book"></i> <span>Settings</span></a></li>
             </ul>
         </section>

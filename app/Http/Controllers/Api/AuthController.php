@@ -15,8 +15,9 @@ class AuthController extends Controller
         $validator = validator()->make($request->all(),[
             'name' => 'required',
             'city_id' => 'required',
-            'phone' => 'required|unique:clients',
-            'donation_last_date' => 'required',
+            'phone' => 'required|unique:clients|digits:11',
+            'donation_last_date' => 'required|date_format:Y-m-d',
+            'birth_date' => 'required|date_format:Y-m-d',
             'blood_type' => 'required|in:O-,O+,B-,B+,A+,A-,AB-,AB+',
             'password' => 'required|confirmed',
             'email' => 'required|unique:clients',
