@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\CarModel;
-use App\Models\CarType;
 use App\Models\City;
 use App\Models\DonationRequest;
 use App\Models\Governorate;
 use App\Models\Post;
+use App\Models\RequestLog;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class MainController extends Controller
 {
-    public function posts()
+    public function posts(Request $request)
     {
+        RequestLog::create(['content' => $request->all(),'service' => 'posts']);
         $posts = Post::with('category')->paginate(10);
         return responseJson(1,'success',$posts);
     }
 
     public function donationRequests(Request $request)
     {
+        RequestLog::create(['content' => $request->all(),'service' => 'donations']);
         $donations = DonationRequest::where(function ($query) use($request){
             if ($request->has('city_id'))
             {
@@ -36,6 +37,7 @@ class MainController extends Controller
 
     public function post(Request $request)
     {
+        RequestLog::create(['content' => $request->all(),'service' => 'post details']);
         $post = Post::with('category')->find($request->post_id);
         if (!$post)
         {
@@ -46,6 +48,7 @@ class MainController extends Controller
 
     public function donationRequest(Request $request)
     {
+        RequestLog::create(['content' => $request->all(),'service' => 'donation details']);
         $donation = DonationRequest::with('city','client')->find($request->donation_id);
         if (!$donation)
         {
@@ -62,6 +65,7 @@ class MainController extends Controller
 
     public function cities(Request $request)
     {
+        RequestLog::create(['content' => $request->all(),'service' => 'cities']);
         $cities = City::where(function ($query) use($request){
             if ($request->has('governorate_id'))
             {
@@ -73,6 +77,7 @@ class MainController extends Controller
 
     public function donationRequestCreate(Request $request)
     {
+        RequestLog::create(['content' => $request->all(),'service' => 'donation create']);
         $rules = [
             'patient_name' => 'required',
             'patient_age' => 'required:digits',
@@ -90,5 +95,48 @@ class MainController extends Controller
         $donationRequest = $request->user()->requests()->create($request->all());
         return responseJson(1,'تم الاضافة بنجاح',$donationRequest->load('city'));
 
+    }
+
+    public function logs()
+    {
+        $requests = RequestLog::latest()->paginate(50);
+        return $requests;
+    }
+
+    public function notificationsCount(Request $request)
+    {
+        return responseJson(1,'loaded...',[
+            'notifications_count' => $request->user()->notifications()->count()
+        ]);
+    }
+    public function notifications(Request $request)
+    {
+        $items = $request->user()->notifications()->latest()->paginate(20);
+        return responseJson(1, 'Loaded...', $items);
+    }
+    public function settings()
+    {
+        return responseJson(1,'loaded',settings());
+    }
+
+    public function postFavourite(Request $request)
+    {
+        RequestLog::create(['content' => $request->all(),'service' => 'donation create']);
+        $rules = [
+            'post_id' => 'required|exists:posts,id',
+        ];
+        $validator = validator()->make($request->all(),$rules);
+        if ($validator->fails())
+        {
+            return responseJson(0,$validator->errors()->first(),$validator->errors());
+        }
+        $request->user()->favourites()->toggle($request->post_id);
+        return responseJson(1,'Success');
+    }
+
+    public function myFavourites(Request $request)
+    {
+        $posts = $request->user()->favourites()->latest()->paginate(20);
+        return responseJson(1,'Loaded...',$posts);
     }
 }

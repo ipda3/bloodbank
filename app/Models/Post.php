@@ -10,7 +10,7 @@ class Post extends Model
     protected $table = 'posts';
     public $timestamps = true;
     protected $fillable = array('client_id', 'title', 'content', 'thumbnail', 'publish_date', 'category_id');
-    protected $appends = array('thumbnail_full_path');
+    protected $appends = array('thumbnail_full_path','is_favourite');
 
     public function category()
     {
@@ -22,9 +22,21 @@ class Post extends Model
         return asset($this->thumbnail);
     }
 
-    public function hasFav()
+    public function getIsFavouriteAttribute()
     {
-        return $this->hasMany('ArticleClient');
+        $favourite = request()->user()->whereHas('favourites',function ($query){
+            $query->where('client_post.post_id',$this->id);
+        })->first();
+        if ($favourite)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public function favourites()
+    {
+        return $this->belongsToMany(Client::class);
     }
 
 }

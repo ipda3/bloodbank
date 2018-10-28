@@ -3,20 +3,21 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateClientPostTable extends Migration {
+class CreateClientNotificationTable extends Migration {
 
 	public function up()
 	{
-		Schema::create('client_post', function(Blueprint $table) {
+		Schema::create('client_notification', function(Blueprint $table) {
 			$table->increments('id');
 			$table->timestamps();
+			$table->integer('notification_id');
 			$table->integer('client_id');
-			$table->integer('post_id');
+			$table->boolean('is_read')->default(0);
 		});
 	}
 
 	public function down()
 	{
-		Schema::drop('client_post');
+		Schema::drop('client_notification');
 	}
 }

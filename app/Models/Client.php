@@ -9,11 +9,17 @@ class Client extends Authenticatable
 
     protected $table = 'clients';
     public $timestamps = true;
-    protected $fillable = array('name', 'email', 'birth_date', 'city_id','blood_type', 'phone', 'password', 'is_active','donation_last_date');
+    protected $fillable = array('name', 'email', 'birth_date', 'city_id','blood_type', 'phone',
+        'password', 'is_active','donation_last_date','pin_code');
 
     public function requests()
     {
         return $this->hasMany('App\Models\DonationRequest');
+    }
+
+    public function notifications()
+    {
+        return $this->belongsToMany('App\Models\Notification')->withPivot('is_read');
     }
 
     public function favourites()
@@ -34,6 +40,12 @@ class Client extends Authenticatable
     public function bloodTypes()
     {
         return $this->belongsToMany('App\BloodType');
+    }
+
+
+    public function tokens()
+    {
+        return $this->hasMany('App\Models\Token');
     }
 
     protected $hidden = [

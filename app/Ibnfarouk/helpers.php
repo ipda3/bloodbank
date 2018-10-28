@@ -28,12 +28,12 @@ function make_slug($string = null, $separator = "-")
 
 function settings()
 {
-    $settings = \App\Models\Setting::find(1);
+    $settings = \App\Models\Settings::find(1);
 
     if ($settings) {
         return $settings;
     } else {
-        return new \App\Models\Setting;
+        return new \App\Models\Settings;
     }
 }
 
