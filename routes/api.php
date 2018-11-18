@@ -34,6 +34,9 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'],function (){
         Route::get('post','MainController@post');
         Route::get('donation-request','MainController@donationRequest');
         Route::post('donation-request/create','MainController@donationRequestCreate');
+        Route::post('contact','MainController@contact');
+        Route::post('report','MainController@report');
+        Route::post('notifications-settings','AuthController@notificationsSettings');
         Route::post('post-toggle-favourite','MainController@postFavourite');
         Route::get('my-favourites', 'MainController@myFavourites');
         Route::get('notifications-count', 'MainController@notificationsCount');

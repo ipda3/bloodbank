@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\BloodType;
 use App\Models\City;
+use App\Models\Contact;
 use App\Models\DonationRequest;
 use App\Models\Governorate;
 use App\Models\Post;
@@ -139,4 +141,38 @@ class MainController extends Controller
         $posts = $request->user()->favourites()->latest()->paginate(20);
         return responseJson(1,'Loaded...',$posts);
     }
+
+    public function contact(Request $request)
+    {
+        RequestLog::create(['content' => $request->all(),'service' => 'contact us']);
+        $rules = [
+            'title' => 'required',
+            'message' => 'required',
+        ];
+        $validator = validator()->make($request->all(),$rules);
+        if ($validator->fails())
+        {
+            return responseJson(0,$validator->errors()->first(),$validator->errors());
+        }
+
+        $contact = $request->user()->contacts()->create($request->all());
+        return responseJson(1,'تم الارسال',$contact);
+    }
+
+    public function report(Request $request)
+    {
+        RequestLog::create(['content' => $request->all(),'service' => 'report']);
+        $rules = [
+            'message' => 'required',
+        ];
+        $validator = validator()->make($request->all(),$rules);
+        if ($validator->fails())
+        {
+            return responseJson(0,$validator->errors()->first(),$validator->errors());
+        }
+
+        $report = $request->user()->reports()->create($request->all());
+        return responseJson(1,'تم الارسال',$report);
+    }
+
 }

@@ -27,7 +27,7 @@ class Client extends Authenticatable
         return $this->belongsToMany('App\Models\Post');
     }
 
-    public function report()
+    public function reports()
     {
         return $this->hasMany('App\Models\Report');
     }
@@ -39,7 +39,12 @@ class Client extends Authenticatable
 
     public function bloodTypes()
     {
-        return $this->belongsToMany('App\BloodType');
+        return $this->belongsToMany('App\Models\BloodType');
+    }
+
+    public function cities()
+    {
+        return $this->belongsToMany('App\Models\City');
     }
 
 
