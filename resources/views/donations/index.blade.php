@@ -1,6 +1,7 @@
 @extends('layouts.app')
+@inject('donation','App\Models\DonationRequest')
 @section('page_title')
-    Governorates
+    Donations
 @endsection
 
 @section('content')
@@ -10,7 +11,7 @@
 
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">List of governorates</h3>
+                <h3 class="box-title">List of donations</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -21,7 +22,7 @@
                 </div>
             </div>
             <div class="box-body">
-                <a href="{{url(route('governorates.create'))}}" class="btn btn-primary"><i class="fa fa-plus"></i> New Governorate</a>
+
                 @include('flash::message')
                 @if(count($records))
                     <div class="table-responsive">
@@ -29,7 +30,14 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
+                                <th>Patient_name</th>
+                                <th>Patient_age</th>
+                                <th>Blood_bags</th>
+                                <th>Hospital_name</th>
+                                <th>Hospital_address</th>
+                                <th>Phone</th>
+                                <th>City</th>
+                                <th>Blood_type</th>
                                 <th class="text-center">Edit</th>
                                 <th class="text-center">Delete</th>
                             </tr>
@@ -37,22 +45,24 @@
                             <tbody>
                             @foreach($records as $record)
                                 <tr>
-                                    <td>{{$loop->iteration}}</td>
-                                    <td>{{$record->name}}</td>
+                                    <td class="text-center">{{$loop->iteration}}</td>
+                                    <td class="text-center">{{$record->patient_name}}</td>
+                                    <td class="text-center">{{$record->patient_age}}</td>
+                                    <td class="text-center">{{$record->bags_num}}</td>
+                                    <td class="text-center">{{$record->hospital_name}}</td>
+                                    <td class="text-center">{{$record->hospital_address}}</td>
+                                    <td class="text-center">{{$record->phone}}</td>
+                                    <td class="text-center">{{optional($record->city)->name}}</td>
+                                    <td class="text-center">{{$record->blood_type}}</td>
                                     <td class="text-center">
-                                        <a href="{{url(route('governorates.edit',$record->id))}}" class="btn btn-success btn-xs">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
+                                        <a href="{{url(route('donations.edit',$record->id))}}" class="btn btn-success btn-xs"><i class="fa fa-edit"></i></a>
                                     </td>
                                     <td class="text-center">
-                                        {!!Form::open([
-                                        'action' =>['GovernorateController@destroy',$record->id],
-                                        'method' =>'delete'
-
+                                        {!! Form::open([
+                                            'action' => ['DonationController@destroy',$record->id],
+                                            'method' => 'delete'
                                         ]) !!}
-                                        <button type="submit" class="btn btn-danger btn-xs">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
+                                        <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button>
                                         {!! Form::close() !!}
                                     </td>
                                 </tr>

@@ -136,7 +136,7 @@ function getYoutubeId($url)
 }
 
 
-function notifyByFirebase($title,$body,$tokens,$data = [],$type)
+function notifyByFirebase($title,$body,$tokens,$data = [])        // paramete 5 =>>>> $type
 {
 // https://gist.github.com/rolinger/d6500d65128db95f004041c2b636753a
 // API access key from Google FCM App Console
@@ -175,20 +175,20 @@ function notifyByFirebase($title,$body,$tokens,$data = [],$type)
         'data' => $data
     );
 
-    if($type == 'client')
-    {
-        $headers = array(
-            'Authorization: key='.env('API_ACCESS_KEY_client'),
-            'Content-Type: application/json'
-        );
-    }
-    if($type == 'driver')
-    {
-        $headers = array(
-            'Authorization: key='.env('API_ACCESS_KEY_driver'),
-            'Content-Type: application/json'
-        );
-    }
+    // if($type == 'client')
+    // {
+    //     $headers = array(
+    //         'Authorization: key='.env('API_ACCESS_KEY_client'),
+    //         'Content-Type: application/json'
+    //     );
+    // }
+    // if($type == 'driver')
+    // {
+    //     $headers = array(
+    //         'Authorization: key='.env('API_ACCESS_KEY_driver'),
+    //         'Content-Type: application/json'
+    //     );
+    // }
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');

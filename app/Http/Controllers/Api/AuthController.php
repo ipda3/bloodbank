@@ -36,9 +36,9 @@ class AuthController extends Controller
         $client = Client::create($request->all());
         $client->api_token = str_random(60);
         $client->save();
-        $client->cities()->attach($request->city_id);
+        $client->governorates()->attach($request->governorate_id);
         $bloodType = BloodType::where('name',$request->blood_type)->first();
-        $client->bloodTypes()->attach($bloodType->id);
+        $client->bloodtypes()->attach($bloodType->id);
         return responseJson(1,'تم الاضافة بنجاح',[
             'api_token' => $client->api_token,
             'client' => $client
@@ -47,7 +47,7 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        RequestLog::create(['content' => $request->all(),'service' => 'login']);
+       RequestLog::create(['content' => $request->all(),'service' => 'login']);
         $validator = validator()->make($request->all(),[
             'phone' => 'required',
             'password' => 'required',
@@ -100,18 +100,18 @@ class AuthController extends Controller
 
         $loginUser->save();
 
-        if ($request->has('city_id'))
+        if ($request->has('governorate_id'))
         {
-            $loginUser->cities()->detach($request->city_id);
-            $loginUser->cities()->attach($request->city_id);
+            $loginUser->governorates()->detach($request->governorate_id);
+            $loginUser->governorates()->attach($request->governorate_id);
         }
 
         if ($request->has('blood_type'))
         {
 
             $bloodType = BloodType::where('name',$request->blood_type)->first();
-            $loginUser->bloodTypes()->detach($bloodType->id);
-            $loginUser->bloodTypes()->attach($bloodType->id);
+            $loginUser->bloodtypes()->detach($bloodType->id);
+            $loginUser->bloodtypes()->attach($bloodType->id);
         }
 
         $data = [
@@ -195,7 +195,7 @@ class AuthController extends Controller
     {
         RequestLog::create(['content' => $request->all(),'service' => 'Notifications Settings']);
         $rules = [
-            'cities.*' => 'exists:cities,id',
+            'governorates.*' => 'exists:governorates,id',
             'blood_types.*' => 'exists:blood_types,name',
         ];
         $validator = validator()->make($request->all(),$rules);
@@ -204,20 +204,20 @@ class AuthController extends Controller
             return responseJson(0,$validator->errors()->first(),$validator->errors());
         }
 
-        if ($request->has('cities'))
+        if ($request->has('governorates'))
         {
-            $request->user()->cities()->sync($request->cities);
+            $request->user()->governorates()->sync($request->governorates);
         }
 
         if ($request->has('blood_types'))
         {
             $blood_types = BloodType::whereIn('name',$request->blood_types)->pluck('blood_types.id')->toArray();
-            $request->user()->bloodTypes()->sync($request->$blood_types);
+            $request->user()->bloodtypes()->sync($blood_types);
         }
 
         $data = [
-            'cities' => $request->user()->cities()->pluck('cities.id')->toArray(),
-            'bloodTypes' => $request->user()->bloodTypes()->pluck('blood_types.name')->toArray(),
+            'governorates' => $request->user()->governorates()->pluck('governorates.id')->toArray(),
+            'bloodtypes' => $request->user()->bloodtypes()->pluck('blood_types.name')->toArray(),
         ];
         return responseJson(1,'تم  التحديث',$data);
     }

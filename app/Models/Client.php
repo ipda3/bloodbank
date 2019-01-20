@@ -37,14 +37,19 @@ class Client extends Authenticatable
         return $this->hasMany('App\Models\Contact');
     }
 
-    public function bloodTypes()
+    public function bloodtypes()
     {
-        return $this->belongsToMany('App\Models\BloodType');
+        return $this->belongsToMany('App\Models\BloodType','blood_type_client','client_id','blood_type_id');
     }
 
-    public function cities()
+    public function governorates()
     {
-        return $this->belongsToMany('App\Models\City');
+        return $this->belongsToMany('App\Models\Governorate','client_governorate','client_id','governorate_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo('App\Models\City');
     }
 
 

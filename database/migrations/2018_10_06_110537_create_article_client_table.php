@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
-class CreateClientPostTable extends Migration {
+class CreateArticleClientTable extends Migration {
 
 	public function up()
 	{

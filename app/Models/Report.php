@@ -11,4 +11,8 @@ class Report extends Model
     public $timestamps = true;
     protected $fillable = array('client_id', 'message');
 
+    public function  client()
+    {
+        return $this->belongsTo('App\Models\Client');
+    }
 }
