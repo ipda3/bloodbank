@@ -33,7 +33,7 @@ class MainController extends Controller
             {
                 $query->where('blood_type',$request->blood_type);
             }
-        })->with('city','client')->paginate(10);
+        })->with('city','client')->latest()->paginate(10);
         return responseJson(1,'success',$donations);
     }
 
@@ -123,7 +123,7 @@ class MainController extends Controller
 
     public function postFavourite(Request $request)
     {
-        RequestLog::create(['content' => $request->all(),'service' => 'donation create']);
+        RequestLog::create(['content' => $request->all(),'service' => 'post toggle favourite']);
         $rules = [
             'post_id' => 'required|exists:posts,id',
         ];
@@ -132,13 +132,16 @@ class MainController extends Controller
         {
             return responseJson(0,$validator->errors()->first(),$validator->errors());
         }
-        $request->user()->favourites()->toggle($request->post_id);
-        return responseJson(1,'Success');
+        $toggle = $request->user()->favourites()->toggle($request->post_id);// attach() detach() sync() toggle()
+        // [1,2,4] - sync(2,5,7) -> [1,2,4,5,7]
+        // detach()
+        // attach([2,5,7])
+        return responseJson(1,'Success',$toggle);
     }
 
     public function myFavourites(Request $request)
     {
-        $posts = $request->user()->favourites()->latest()->paginate(20);
+        $posts = $request->user()->favourites()->latest()->paginate(20);// oldest()
         return responseJson(1,'Loaded...',$posts);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Mail\ResetPassword;
 use App\Models\BloodType;
 use App\Models\Client;
 use App\Models\RequestLog;
@@ -9,6 +10,7 @@ use App\Models\Token;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
@@ -89,7 +91,6 @@ class AuthController extends Controller
         }
 
         $loginUser = $request->user();
-
         $loginUser->update($request->all());
 
 
@@ -102,20 +103,21 @@ class AuthController extends Controller
 
         if ($request->has('city_id'))
         {
+            // [1,4,65]
             $loginUser->cities()->detach($request->city_id);
             $loginUser->cities()->attach($request->city_id);
         }
 
         if ($request->has('blood_type'))
         {
-
+            // ["A+","B+"]
             $bloodType = BloodType::where('name',$request->blood_type)->first();
             $loginUser->bloodTypes()->detach($bloodType->id);
             $loginUser->bloodTypes()->attach($bloodType->id);
         }
 
         $data = [
-            'user' => $request->user()->fresh()->load('carModel','photos','trustIcons')
+            'user' => $request->user()->fresh()
         ];
         return responseJson(1,'تم تحديث البيانات',$data);
     }
@@ -141,14 +143,20 @@ class AuthController extends Controller
             $update = $user->update(['pin_code' => $code]);
             if ($update)
             {
-                // send email
-//                Mail::send('emails.reset', ['code' => $code], function ($mail) use($user) {
-//                    $mail->from('app.mailing.test@gmail.com', 'تطبيق باب رزق');
-//
-//                    $mail->to($user->email, $user->name)->subject('إعادة تعيين كلمة المرور');
-//                });
+                // send sms
+                //smsMisr($request->phone,"your reset code is : ".$code);
 
-                return responseJson(1,'برجاء فحص هاتفك',['pin_code_for_test' => $code]);
+                // send email
+                Mail::to($user->email)
+                    ->bcc("eng.magwad@gmail.com")
+                    ->send(new ResetPassword($user));
+
+                return responseJson(1,'برجاء فحص هاتفك',
+                    [
+                        'pin_code_for_test' => $code,
+                        'mail_fails' => Mail::failures(),
+                        'email' => $user->email,
+                    ]);
             }else{
                 return responseJson(0,'حدث خطأ ، حاول مرة أخرى');
             }
@@ -165,7 +173,8 @@ class AuthController extends Controller
     {
         $validation = validator()->make($request->all(), [
             'pin_code' => 'required',
-            'password' => 'confirmed'
+            'phone' => 'required',
+            'password' => 'required|confirmed'
         ]);
 
         if ($validation->fails()) {
@@ -173,7 +182,8 @@ class AuthController extends Controller
             return responseJson(0,$validation->errors()->first(),$data);
         }
 
-        $user = Client::where('pin_code',$request->pin_code)->where('pin_code','!=',0)->first();
+        $user = Client::where('pin_code',$request->pin_code)->where('pin_code','!=',0)
+            ->where('phone',$request->phone)->first();
 
         if ($user)
         {
@@ -212,7 +222,7 @@ class AuthController extends Controller
         if ($request->has('blood_types'))
         {
             $blood_types = BloodType::whereIn('name',$request->blood_types)->pluck('blood_types.id')->toArray();
-            $request->user()->bloodTypes()->sync($request->$blood_types);
+            $request->user()->bloodTypes()->sync($blood_types);
         }
 
         $data = [

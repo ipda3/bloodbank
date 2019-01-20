@@ -12,6 +12,11 @@ class Client extends Authenticatable
     protected $fillable = array('name', 'email', 'birth_date', 'city_id','blood_type', 'phone',
         'password', 'is_active','donation_last_date','pin_code');
 
+//    public function setPasswordAttribute($value)
+//    {
+//        $this->attributes['password'] = bcrypt($value);
+//    }
+
     public function requests()
     {
         return $this->hasMany('App\Models\DonationRequest');
