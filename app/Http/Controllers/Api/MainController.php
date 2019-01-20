@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\BloodType;
+use App\Models\BloodType;
 use App\Models\City;
 use App\Models\Contact;
 use App\Models\DonationRequest;
 use App\Models\Governorate;
 use App\Models\Post;
+use App\Models\Client;
 use App\Models\RequestLog;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -79,6 +81,7 @@ class MainController extends Controller
 
     public function donationRequestCreate(Request $request)
     {
+        // validation
         RequestLog::create(['content' => $request->all(),'service' => 'donation create']);
         $rules = [
             'patient_name' => 'required',
@@ -94,7 +97,54 @@ class MainController extends Controller
         {
             return responseJson(0,$validator->errors()->first(),$validator->errors());
         }
+        // create donation request
         $donationRequest = $request->user()->requests()->create($request->all());
+        
+        // find clients suitable for this donation request
+        $clientsIds = $donationRequest->city->governorate
+        ->clients()->whereHas('bloodtypes',function($q) use ($request){
+            $q->where('blood_types.id',$request->blood_type_id);
+        })->pluck('clients.id')->toArray();
+
+        if(count($clientsIds))
+        {
+            // create a notification on database
+            $notification = $donationRequest->notifications()->create([
+                'title'=> 'احتاج متبرع لفصيلة ',
+                'content' => $request->user()->name.'محتاج متبرع لفصيلة ',
+            ]);
+            // attach clients to this notofication
+            $notification->clients()->attach($clientsIds);
+
+            // get tokens for FCM (Push notification using Firebase cloud)
+            $tokens = $client->tokens()->where('token','!=','')
+            ->whereIn('client_id',$clientsIds)->pluck('token')->toArray();
+            if(count($tokens))
+            {
+                $audience = ['include_players_ids' => $tokens];
+                $content = [
+                    'ar' => 'يوجد اشعار من ل'.$request->user()->name(),
+                    'en' => 'you have anew noti'.$request->user()->name(),
+                ];    
+                $title = $notification->title;
+                $content = $notification->content;
+                $data = [
+                     'action' => 'new notify',
+                     'data' => null,
+                     'client' => 'client',
+                     'title' =>$notification->title,
+                     'content' => $notification->content,
+                     'donation_request_id' => $donationRequest->id
+                ];
+                info(json_encode($data));
+
+                $send = notifyByFirebase($title,$content,$tokens,$data);
+                info($send);
+                info("firebase result" . $send);
+                $send = json_decode($send);
+            }
+        }
+        
         return responseJson(1,'تم الاضافة بنجاح',$donationRequest->load('city'));
 
     }
@@ -176,6 +226,37 @@ class MainController extends Controller
 
         $report = $request->user()->reports()->create($request->all());
         return responseJson(1,'تم الارسال',$report);
+    }
+
+
+    public function testNotification(Request $request)
+    {
+        $audience = ['included_segments' => array('All')];
+        if ($request->has('ids'))
+        {
+            $audience = ['include_player_ids' => (array)$request->ids];
+       }
+        $contents = ['en' => $request->title];
+        Log::info('test notification');
+        Log::info(json_encode($audience));
+        $send = notifyByOneSignal($audience , $contents , $request->data);
+        Log::info($send);
+        /*
+        firebase
+        */
+        /*
+        $tokens = $request->ids;
+        $title = $request->title;
+        $body = $request->body;
+        $data = Order::first();
+        $send = notifyByFirebase($title, $body, $tokens, $data, true);
+        info("firebase result: " . $send);
+        */
+        return response()->json([
+            'status' => 1,
+            'msg' => 'تم الارسال بنجاح',
+            'send' => json_decode($send)
+        ]);
     }
 
 }

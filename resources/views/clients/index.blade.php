@@ -1,6 +1,7 @@
 @extends('layouts.app')
+
 @section('page_title')
-    Governorates
+    Clients
 @endsection
 
 @section('content')
@@ -10,7 +11,7 @@
 
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">List of governorates</h3>
+                <h3 class="box-title">List of clients</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -21,7 +22,6 @@
                 </div>
             </div>
             <div class="box-body">
-                <a href="{{url(route('governorates.create'))}}" class="btn btn-primary"><i class="fa fa-plus"></i> New Governorate</a>
                 @include('flash::message')
                 @if(count($records))
                     <div class="table-responsive">
@@ -30,7 +30,12 @@
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
-                                <th class="text-center">Edit</th>
+                                <th>Email</th>
+                                <th>Birth Date</th>
+                                <th>Phone</th>
+                                <th>Blood Type</th>
+                                <th>Donation Last Date</th>
+                                <th>City</th>
                                 <th class="text-center">Delete</th>
                             </tr>
                             </thead>
@@ -39,14 +44,16 @@
                                 <tr>
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$record->name}}</td>
-                                    <td class="text-center">
-                                        <a href="{{url(route('governorates.edit',$record->id))}}" class="btn btn-success btn-xs">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-                                    </td>
+                                    <td>{{$record->email}}</td>
+                                    <td>{{$record->birth_date}}</td>
+                                    <td>{{$record->phone}}</td>
+                                    <td>{{$record->blood_type}}</td>
+                                    <td>{{$record->donation_last_date}}</td>
+                                    <td>{{optional($record->city)->name}}</td>
+
                                     <td class="text-center">
                                         {!!Form::open([
-                                        'action' =>['GovernorateController@destroy',$record->id],
+                                        'action' =>['ClientController@destroy',$record->id],
                                         'method' =>'delete'
 
                                         ]) !!}

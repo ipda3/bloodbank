@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Governorate;
+
+use App\Models\Category;
 use Illuminate\Http\Request;
 
-class GovernorateController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,8 +14,8 @@ class GovernorateController extends Controller
      */
     public function index()
     {
-        $records = Governorate::paginate(20);
-        return view('governorates.index',compact('records'));
+        $records = Category::paginate(10);
+        return view('categories.index',compact('records'));
     }
 
     /**
@@ -24,7 +25,7 @@ class GovernorateController extends Controller
      */
     public function create()
     {
-        return view('governorates.create');
+        return view('categories.create');
     }
 
     /**
@@ -39,18 +40,15 @@ class GovernorateController extends Controller
             'name' => 'required'
         ];
         $messages = [
-            'name.required' => 'Name is Required'
+            'name.required' => 'Name is required'
         ];
         $this->validate($request,$rules,$messages);
-
-//        $record = new Governorate;
-//        $record->name = $request->input('name');
-//        $record->save();
-
-        $record = Governorate::create($request->all());
-
-        flash()->success("تم الإضافة");
-        return redirect(route('governorate.index'));
+        /*$record = new Governerate;
+        $record->name = $request->input('name');
+        $record->save();*/
+        $record = Category::create($request->all());
+        flash()->success('<p style="text-align: center;font-weight: bolder">تــم اضــافة القسم بنجــاح</p>');
+        return redirect(route('categories.index'));
     }
 
     /**
@@ -72,8 +70,8 @@ class GovernorateController extends Controller
      */
     public function edit($id)
     {
-        $model = Governorate::findOrFail($id);
-        return view('governorates.edit',compact('model'));
+        $model = Category::findOrFail($id);
+        return view('categories.edit',compact('model'));
     }
 
     /**
@@ -85,10 +83,17 @@ class GovernorateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $record = Governorate::findOrFail($id);
+        $rules = [
+                 'name' => 'required'
+        ];
+        $message = [
+                  'name.required' => 'Name is required'
+        ];
+        $this->validate($request,$rules,$message);
+        $record = Category::findOrFail($id);
         $record->update($request->all());
-        flash()->success("تم التعديل");
-        return redirect(route('governorate.index'));
+        flash()->success('<p class="text-center" style="font-size:20px; font-weight:900;font-family:Arial" >لقـــد تـــــــم التحــديــــــــث بنــجـــــــاح</p>');
+        return redirect(route('categories.index'));
     }
 
     /**
@@ -99,14 +104,9 @@ class GovernorateController extends Controller
      */
     public function destroy($id)
     {
-        $record = Governorate::findOrFail($id);
-        if($record->cities()->count())
-        {
-            flash()->error("لا يمكن الحذف ،  مدن مرتبطة بالمحافظة");
-            return back();
-        }
+        $record = Category::findOrFail($id);
         $record->delete();
-        flash()->success('تم الحذف');
+        flash()->error('<p class="text-center" style="font-size:20px; font-weight:900;font-family:Arial" >تـــم الحــذف </p>');
         return back();
     }
 }

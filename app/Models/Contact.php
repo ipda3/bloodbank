@@ -11,4 +11,8 @@ class Contact extends Model
     public $timestamps = true;
     protected $fillable = array('client_id', 'title', 'message');
 
+    public function client()
+    {
+        return $this->belongsTo('App\Models\Client');
+    }
 }

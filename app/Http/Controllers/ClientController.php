@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Governorate;
+
+use App\Models\Client;
 use Illuminate\Http\Request;
 
-class GovernorateController extends Controller
+class ClientController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,8 +14,8 @@ class GovernorateController extends Controller
      */
     public function index()
     {
-        $records = Governorate::paginate(20);
-        return view('governorates.index',compact('records'));
+        $records = Client::paginate(20);
+        return view('clients.index',compact('records'));
     }
 
     /**
@@ -24,7 +25,7 @@ class GovernorateController extends Controller
      */
     public function create()
     {
-        return view('governorates.create');
+        //
     }
 
     /**
@@ -35,22 +36,7 @@ class GovernorateController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'name' => 'required'
-        ];
-        $messages = [
-            'name.required' => 'Name is Required'
-        ];
-        $this->validate($request,$rules,$messages);
-
-//        $record = new Governorate;
-//        $record->name = $request->input('name');
-//        $record->save();
-
-        $record = Governorate::create($request->all());
-
-        flash()->success("تم الإضافة");
-        return redirect(route('governorate.index'));
+        //
     }
 
     /**
@@ -72,8 +58,7 @@ class GovernorateController extends Controller
      */
     public function edit($id)
     {
-        $model = Governorate::findOrFail($id);
-        return view('governorates.edit',compact('model'));
+        //
     }
 
     /**
@@ -85,10 +70,7 @@ class GovernorateController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $record = Governorate::findOrFail($id);
-        $record->update($request->all());
-        flash()->success("تم التعديل");
-        return redirect(route('governorate.index'));
+        //
     }
 
     /**
@@ -99,14 +81,9 @@ class GovernorateController extends Controller
      */
     public function destroy($id)
     {
-        $record = Governorate::findOrFail($id);
-        if($record->cities()->count())
-        {
-            flash()->error("لا يمكن الحذف ،  مدن مرتبطة بالمحافظة");
-            return back();
-        }
+        $record = Client::findOrFail($id);
         $record->delete();
-        flash()->success('تم الحذف');
+        flash()->error('<p class="text-center" style="font-size:20px; font-weight:900;font-family:Arial" >تـــم الحــذف </p>');
         return back();
     }
 }

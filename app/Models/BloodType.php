@@ -16,4 +16,9 @@ class BloodType extends Model
         return $this->belongsToMany('App\Models\Client');
     }
 
+    public function donation()
+    {
+        return $this->hasMany('App\Models\DonationRequest');
+    }
+
 }

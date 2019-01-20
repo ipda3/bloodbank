@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+
 });
 
 
@@ -20,4 +21,11 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('governorate','GovernorateController');
+Route::resource('governorates','GovernorateController');
+Route::resource('cities','CityController');
+Route::resource('categories','CategoryController');
+Route::resource('posts','PostController');
+Route::resource('donations','DonationController');
+Route::resource('contacts','ContactController');
+Route::resource('reports','ReportController');
+Route::resource('clients','ClientController');
