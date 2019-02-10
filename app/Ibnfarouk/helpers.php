@@ -175,6 +175,11 @@ function notifyByFirebase($title,$body,$tokens,$data = [])        // paramete 5 
         'data' => $data
     );
 
+    $headers = array(
+         'Authorization: key='.env('FIREBASE_API_ACCESS_KEY'),
+         'Content-Type: application/json'
+     );
+
     // if($type == 'client')
     // {
     //     $headers = array(
