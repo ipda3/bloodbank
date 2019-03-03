@@ -9,7 +9,7 @@ class Client extends Authenticatable
 
     protected $table = 'clients';
     public $timestamps = true;
-    protected $fillable = array('name', 'email', 'birth_date', 'city_id','blood_type', 'phone',
+    protected $fillable = array('name', 'email', 'birth_date', 'city_id','blood_type_id', 'phone',
         'password', 'is_active','donation_last_date','pin_code');
 
 //    public function setPasswordAttribute($value)
@@ -55,6 +55,11 @@ class Client extends Authenticatable
     public function city()
     {
         return $this->belongsTo('App\Models\City');
+    }
+
+    public function bloodType()
+    {
+        return $this->belongsTo('App\Models\BloodType');
     }
 
 

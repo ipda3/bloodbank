@@ -24,7 +24,8 @@ class Post extends Model
 
     public function getIsFavouriteAttribute()
     {
-        $favourite = request()->user()->whereHas('favourites',function ($query){
+        $favourite = $this->whereHas('favourites',function ($query){
+            $query->where('client_post.client_id',request()->user()->id);
             $query->where('client_post.post_id',$this->id);
         })->first();
         if ($favourite)

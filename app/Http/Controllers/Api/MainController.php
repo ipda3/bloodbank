@@ -31,10 +31,10 @@ class MainController extends Controller
             if ($request->has('city_id')) {
                 $query->where('city_id', $request->city_id);
             }
-            if ($request->has('blood_type')) {
-                $query->where('blood_type', $request->blood_type);
+            if ($request->has('blood_type_id')) {
+                $query->where('blood_type_id', $request->blood_type_id);
             }
-        })->with('city', 'client')->latest()->paginate(10);
+        })->with('city', 'client','bloodType')->latest()->paginate(10);
         return responseJson(1, 'success', $donations);
     }
 
@@ -51,7 +51,7 @@ class MainController extends Controller
     public function donationRequest(Request $request)
     {
         RequestLog::create(['content' => $request->all(), 'service' => 'donation details']);
-        $donation = DonationRequest::with('city', 'client')->find($request->donation_id);
+        $donation = DonationRequest::with('city', 'client','bloodType')->find($request->donation_id);
         if (!$donation) {
             return responseJson(0, '404 no donation found');
         }
@@ -62,6 +62,12 @@ class MainController extends Controller
     {
         $governorates = Governorate::all();
         return responseJson(1, 'success', $governorates);
+    }
+
+    public function bloodTypes()
+    {
+        $bloodTypes = BloodType::all();
+        return responseJson(1, 'success', $bloodTypes);
     }
 
     public function cities(Request $request)
@@ -82,7 +88,7 @@ class MainController extends Controller
         $rules = [
             'patient_name' => 'required',
             'patient_age' => 'required:digits',
-            'blood_type' => 'required|in:O-,O+,B-,B+,A+,A-,AB-,AB+',
+            'blood_type_id' => 'required|exists:blood_types,id',
             'bags_num' => 'required:digits',
             'hospital_address' => 'required',
             'city_id' => 'required|exists:cities,id',
@@ -93,13 +99,13 @@ class MainController extends Controller
             return responseJson(0, $validator->errors()->first(), $validator->errors());
         }
         // create donation request
-        $donationRequest = $request->user()->requests()->create($request->all());
+        $donationRequest = $request->user()->requests()->create($request->all())->load('city.governorate','bloodType');
 
 
         // find clients suitable for this donation request
         $clientsIds = $donationRequest->city->governorate->clients()
             ->whereHas('bloodtypes', function ($q) use ($request,$donationRequest) {
-                $q->where('blood_types.name', $donationRequest->blood_type);
+                $q->where('blood_types.id', $donationRequest->blood_type_id);
             })->pluck('clients.id')->toArray();
 
         $send = "";
@@ -107,7 +113,7 @@ class MainController extends Controller
             // create a notification on database
             $notification = $donationRequest->notifications()->create([
                 'title' => 'يوجد حالة تبرع قريبة منك',
-                'content' => $donationRequest->blood_type . 'محتاج متبرع لفصيلة ',
+                'content' => optional($donationRequest->bloodType)->name . 'محتاج متبرع لفصيلة ',
             ]);
             // attach clients to this notofication
             $notification->clients()->attach($clientsIds);
@@ -210,29 +216,29 @@ class MainController extends Controller
         return responseJson(1, 'تم الارسال', $report);
     }
 
-
     public function testNotification(Request $request)
     {
-        $audience = ['included_segments' => array('All')];
-        if ($request->has('ids')) {
-            $audience = ['include_player_ids' => (array)$request->ids];
-        }
-        $contents = ['en' => $request->title];
-        Log::info('test notification');
-        Log::info(json_encode($audience));
-        $send = notifyByOneSignal($audience, $contents, $request->data);
-        Log::info($send);
+//        $audience = ['included_segments' => array('All')];
+//        if ($request->has('ids'))
+//        {
+//            $audience = ['include_player_ids' => (array)$request->ids];
+//        }
+//        $contents = ['en' => $request->title];
+//        Log::info('test notification');
+//        Log::info(json_encode($audience));
+//        $send = notifyByOneSignal($audience , $contents , $request->data);
+//        Log::info($send);
+
         /*
         firebase
         */
-        /*
         $tokens = $request->ids;
         $title = $request->title;
         $body = $request->body;
-        $data = Order::first();
-        $send = notifyByFirebase($title, $body, $tokens, $data, true);
+        $data = DonationRequest::first();
+        $send = notifyByFirebase($title, $body, $tokens, $data);
         info("firebase result: " . $send);
-        */
+
         return response()->json([
             'status' => 1,
             'msg' => 'تم الارسال بنجاح',

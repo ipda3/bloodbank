@@ -9,7 +9,7 @@ class DonationRequest extends Model
 
     protected $table = 'donation_requests';
     public $timestamps = true;
-    protected $fillable = array('client_id', 'patient_name', 'patient_age', 'blood_type', 'bags_num', 'hospital_name', 'hospital_address', 'city_id', 'phone', 'notes', 'latitude', 'longitude');
+    protected $fillable = array('client_id', 'patient_name', 'patient_age', 'blood_type_id', 'bags_num', 'hospital_name', 'hospital_address', 'city_id', 'phone', 'notes', 'latitude', 'longitude');
 
     public function notifications()
     {
@@ -24,6 +24,11 @@ class DonationRequest extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function bloodType()
+    {
+        return $this->belongsTo('App\Models\BloodType');
     }
 
 }

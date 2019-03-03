@@ -24,7 +24,7 @@ class AuthController extends Controller
             'phone' => 'required|unique:clients|digits:11',
             'donation_last_date' => 'required|date_format:Y-m-d',
             'birth_date' => 'required|date_format:Y-m-d',
-            'blood_type' => 'required|in:O-,O+,B-,B+,A+,A-,AB-,AB+',
+            'blood_type_id' => 'required|exists:blood_types,id',
             'password' => 'required|confirmed',
             'email' => 'required|unique:clients',
         ]);
@@ -39,11 +39,10 @@ class AuthController extends Controller
         $client->api_token = str_random(60);
         $client->save();
         $client->governorates()->attach($request->governorate_id);
-        $bloodType = BloodType::where('name',$request->blood_type)->first();
-        $client->bloodtypes()->attach($bloodType->id);
+        $client->bloodtypes()->attach($request->blood_type_id);
         return responseJson(1,'تم الاضافة بنجاح',[
             'api_token' => $client->api_token,
-            'client' => $client
+            'client' => $client->load('city.governorate','bloodType')
         ]);
     }
 
@@ -67,7 +66,7 @@ class AuthController extends Controller
             {
                 return responseJson(1,'تم تسجيل الدخول',[
                     'api_token' => $client->api_token,
-                    'client' => $client
+                    'client' => $client->load('city.governorate','bloodType')
                 ]);
             }else{
                 return responseJson(0,'بيانات الدخول غير صحيحة');
@@ -108,16 +107,8 @@ class AuthController extends Controller
             $loginUser->governorates()->attach($request->governorate_id);
         }
 
-        if ($request->has('blood_type'))
-        {
-            // ["A+","B+"]
-            $bloodType = BloodType::where('name',$request->blood_type)->first();
-            $loginUser->bloodtypes()->detach($bloodType->id);
-            $loginUser->bloodtypes()->attach($bloodType->id);
-        }
-
         $data = [
-            'user' => $request->user()->fresh()
+            'user' => $request->user()->fresh()->load('city.governorate','bloodType')
         ];
         return responseJson(1,'تم تحديث البيانات',$data);
     }
@@ -148,7 +139,7 @@ class AuthController extends Controller
 
                 // send email
                 Mail::to($user->email)
-                    ->bcc("eng.magwad@gmail.com")
+//                    ->bcc("eng.magwad@gmail.com")
                     ->send(new ResetPassword($user));
 
                 return responseJson(1,'برجاء فحص هاتفك',

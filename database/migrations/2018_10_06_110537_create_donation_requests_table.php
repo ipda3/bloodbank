@@ -13,7 +13,7 @@ class CreateDonationRequestsTable extends Migration {
 			$table->integer('client_id');
 			$table->string('patient_name');
 			$table->integer('patient_age');
-			$table->enum('blood_type', array('O-', 'O+', 'B-', 'B+', 'A+', 'A-', 'AB-', 'AB+'));
+            $table->integer('blood_type_id');
 			$table->integer('bags_num');
 			$table->string('hospital_name');
 			$table->string('hospital_address');
