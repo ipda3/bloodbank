@@ -197,7 +197,7 @@ class AuthController extends Controller
         RequestLog::create(['content' => $request->all(),'service' => 'Notifications Settings']);
         $rules = [
             'governorates.*' => 'exists:governorates,id',
-            'blood_types.*' => 'exists:blood_types,name',
+            'blood_types.*' => 'exists:blood_types,id',
         ];
         $validator = validator()->make($request->all(),$rules);
         if ($validator->fails())
@@ -212,13 +212,12 @@ class AuthController extends Controller
 
         if ($request->has('blood_types'))
         {
-            $blood_types = BloodType::whereIn('name',$request->blood_types)->pluck('blood_types.id')->toArray();
-            $request->user()->bloodtypes()->sync($blood_types);
+            $request->user()->bloodtypes()->sync($request->blood_types);
         }
 
         $data = [
             'governorates' => $request->user()->governorates()->pluck('governorates.id')->toArray(),
-            'blood_types' => $request->user()->bloodtypes()->pluck('blood_types.name')->toArray(),
+            'blood_types' => $request->user()->bloodtypes()->pluck('blood_types.id')->toArray(),
         ];
         return responseJson(1,'تم  التحديث',$data);
     }
