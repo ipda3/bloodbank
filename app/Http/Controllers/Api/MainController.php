@@ -20,7 +20,21 @@ class MainController extends Controller
     public function posts(Request $request)
     {
         RequestLog::create(['content' => $request->all(), 'service' => 'posts']);
-        $posts = Post::with('category')->paginate(10);
+        $posts = Post::with('category')->where(function($post) use($request){
+            if ($request->has('category_id'))
+            {
+                $post->where('category_id',$request->category_id);
+            }
+
+            if ($request->has('keyword'))
+            {
+                $post->where(function($post) use($request){
+                    $post->where('title','like','%'.$request->keyword.'%');
+                    $post->orWhere('content','like','%'.$request->keyword.'%');
+                });
+            }
+
+        })->latest()->paginate(10);
         return responseJson(1, 'success', $posts);
     }
 
