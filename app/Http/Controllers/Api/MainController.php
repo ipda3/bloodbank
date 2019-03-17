@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\BloodType;
+use App\Models\Category;
 use App\Models\City;
 use App\Models\Contact;
 use App\Models\DonationRequest;
@@ -21,12 +22,12 @@ class MainController extends Controller
     {
         RequestLog::create(['content' => $request->all(), 'service' => 'posts']);
         $posts = Post::with('category')->where(function($post) use($request){
-            if ($request->has('category_id'))
+            if ($request->input('category_id'))
             {
                 $post->where('category_id',$request->category_id);
             }
 
-            if ($request->has('keyword'))
+            if ($request->input('keyword'))
             {
                 $post->where(function($post) use($request){
                     $post->where('title','like','%'.$request->keyword.'%');
@@ -42,10 +43,14 @@ class MainController extends Controller
     {
         RequestLog::create(['content' => $request->all(), 'service' => 'donations']);
         $donations = DonationRequest::where(function ($query) use ($request) {
-            if ($request->has('city_id')) {
+            if ($request->input('governorate_id')) {
+                $query->whereHas('city', function ($query) use($request){
+                    $query->where('governorate_id',$request->governorate_id);
+                });
+            }elseif ($request->input('city_id')) {
                 $query->where('city_id', $request->city_id);
             }
-            if ($request->has('blood_type_id')) {
+            if ($request->input('blood_type_id')) {
                 $query->where('blood_type_id', $request->blood_type_id);
             }
         })->with('city', 'client','bloodType')->latest()->paginate(10);
@@ -82,6 +87,12 @@ class MainController extends Controller
     {
         $bloodTypes = BloodType::all();
         return responseJson(1, 'success', $bloodTypes);
+    }
+
+    public function categories()
+    {
+        $categories = Category::all();
+        return responseJson(1, 'success', $categories);
     }
 
     public function cities(Request $request)
