@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('page_title')
-    Create Category
+   تعديل قسم
 @endsection
 
 @section('content')
@@ -28,13 +28,13 @@
                 @include('flash::message')
                 @include('partials.validation_errors')
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name">الإسم</label>
                     {!! Form::text('name',null,[
                     'class' => 'form-control'
                  ]) !!}
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary" type="submit">Update</button>
+                    <button class="btn btn-primary" type="submit">تعديل</button>
                 </div>
 
                 {!! Form::close () !!}

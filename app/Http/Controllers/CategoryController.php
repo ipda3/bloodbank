@@ -28,12 +28,7 @@ class CategoryController extends Controller
         return view('categories.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $rules = [
@@ -47,7 +42,7 @@ class CategoryController extends Controller
         $record->name = $request->input('name');
         $record->save();*/
         $record = Category::create($request->all());
-        flash()->success('<p style="text-align: center;font-weight: bolder">تــم اضــافة القسم بنجــاح</p>');
+        flash()->success('تــم اضــافة القسم بنجــاح');
         return redirect(route('categories.index'));
     }
 
@@ -74,13 +69,7 @@ class CategoryController extends Controller
         return view('categories.edit',compact('model'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         $rules = [
@@ -92,8 +81,7 @@ class CategoryController extends Controller
         $this->validate($request,$rules,$message);
         $record = Category::findOrFail($id);
         $record->update($request->all());
-        flash()->success('<p class="text-center" style="font-size:20px; font-weight:900;font-family:Arial" >لقـــد تـــــــم التحــديــــــــث بنــجـــــــاح</p>');
-        return redirect(route('categories.index'));
+        flash()->success('تم التحديث بنجاح');
     }
 
     /**
@@ -104,9 +92,20 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $record = Category::findOrFail($id);
+        $record = Category::find($id);
+        if (!$record) {
+            return response()->json([
+                'status'  => 0,
+                'message' => 'تعذر الحصول على البيانات'
+            ]);
+        }
+
         $record->delete();
-        flash()->error('<p class="text-center" style="font-size:20px; font-weight:900;font-family:Arial" >تـــم الحــذف </p>');
-        return back();
+        return response()->json([
+                'status'  => 1,
+                'message' => 'تم الحذف بنجاح',
+                'id'      => $id
+            ]);
     }
+
 }

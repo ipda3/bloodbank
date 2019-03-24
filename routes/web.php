@@ -11,21 +11,28 @@
 |
 */
 
+
+
 Route::get('/', function () {
-    //return view('welcome');
+    return view('welcome');
 
 });
 
-
-
 Auth::routes();
+//Admin panel
+Route::group(['middleware'=>'auth' , 'prefix'=>'admin'],function() {
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::resource('governorates','GovernorateController');
-Route::resource('cities','CityController');
-Route::resource('categories','CategoryController');
-Route::resource('posts','PostController');
-Route::resource('donations','DonationController');
-Route::resource('contacts','ContactController');
-Route::resource('reports','ReportController');
-Route::resource('clients','ClientController');
+    Route::get('home', 'HomeController@index');
+    Route::resource('governorates','GovernorateController');
+    Route::resource('cities','CityController');
+    Route::resource('categories','CategoryController');
+    Route::resource('posts','PostController');
+    Route::resource('donations','DonationController');
+    Route::resource('contacts','ContactController');
+    Route::resource('reports','ReportController');
+    Route::resource('clients','ClientController');
+    // User reset password
+    Route::get('user/change-password','UserController@changePassword');
+    Route::post('user/change-password','UserController@changePasswordSave');
+
+});

@@ -1,9 +1,8 @@
 @extends('layouts.app')
 
 @section('page_title')
-    Clients
+   العملاء
 @endsection
-
 @section('content')
 
 
@@ -11,7 +10,7 @@
 
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">List of clients</h3>
+                <h3 class="box-title">كل العملا</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -29,38 +28,33 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Birth Date</th>
-                                <th>Phone</th>
-                                <th>Blood Type</th>
-                                <th>Donation Last Date</th>
-                                <th>City</th>
-                                <th class="text-center">Delete</th>
+                                <th>الإسم</th>
+                                <th>الإيميل</th>
+                                <th>تاريخ الميلاد</th>
+                                <th>الهاتف</th>
+                                <th>فصيلة الدم</th>
+                                <th>اخر تاريخ تبرع بالدم</th>
+                                <th>المدينة</th>
+                                <th class="text-center">حذف</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($records as $record)
-                                <tr>
+                                <tr id="removable{{$record->id}}">
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$record->name}}</td>
                                     <td>{{$record->email}}</td>
                                     <td>{{$record->birth_date}}</td>
                                     <td>{{$record->phone}}</td>
-                                    <td>{{$record->blood_type}}</td>
+                                    <td>{{optional($record->BloodType)->name}}</td>
                                     <td>{{$record->donation_last_date}}</td>
                                     <td>{{optional($record->city)->name}}</td>
 
                                     <td class="text-center">
-                                        {!!Form::open([
-                                        'action' =>['ClientController@destroy',$record->id],
-                                        'method' =>'delete'
-
-                                        ]) !!}
-                                        <button type="submit" class="btn btn-danger btn-xs">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                        {!! Form::close() !!}
+                                        <button id="{{$record->id}}" data-token="{{ csrf_token() }}"
+                                                data-route="{{URL::route('clients.destroy',$record->id)}}"
+                                                type="button" class="destroy btn btn-danger btn-xs"><i
+                                                class="fa fa-trash-o"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -68,9 +62,7 @@
                         </table>
                     </div>
                 @else
-                    <div class="alert alert-danger" role="alert">
-                        No Data
-                    </div>
+                   <p class="text-center"> لا يوجد عملاء !!</p>
                 @endif
             </div>
 

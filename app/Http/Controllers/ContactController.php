@@ -81,10 +81,19 @@ class ContactController extends Controller
      */
     public function destroy($id)
     {
+        $record = Contact::find($id);
+        if (!$record) {
+            return response()->json([
+                    'status'  => 0,
+                    'message' => 'تعذر الحصول على البيانات'
+                ]);
+        }
 
-        $records =Contact::findOrFail($id);
-        $records->delete();
-        flash()->error('<p style="text-align: center;font-weight: bolder">تم الحــذف</p>');
-        return back();
+        $record->delete();
+        return response()->json([
+                'status'  => 1,
+                'message' => 'تم الحذف بنجاح',
+                'id'      => $id
+            ]);
     }
 }

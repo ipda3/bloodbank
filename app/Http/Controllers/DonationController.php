@@ -104,9 +104,20 @@ class DonationController extends Controller
      */
     public function destroy($id)
     {
-        $record = DonationRequest::findOrFail($id);
+        $record = DonationRequest::find($id);
+        if (!$record) {
+            return response()->json([
+                'status'  => 0,
+                'message' => 'تعذر الحصول على البيانات'
+            ]);
+        }
+
         $record->delete();
-        flash()->error('<p style="text-align: center;font-weight: bolder">تم الحــذف</p>');
-        return back();
+        return response()->json([
+                'status'  => 1,
+                'message' => 'تم الحذف بنجاح',
+                'id'      => $id
+            ]);
     }
+
 }

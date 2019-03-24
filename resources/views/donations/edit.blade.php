@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('page_title')
-    Create new donation
+   تعديل التبرع
 @endsection
 
 @section('content')
@@ -27,66 +27,66 @@
                 'method' =>'put'
                 ]) !!}
                 <div class="form-group">
-                    <label for="patient_name">Patient Name</label>
+                    <label for="patient_name">اسم المريض</label>
                     {!! Form::text('patient_name',null,[
                         'class'=>'form-control'
                     ]) !!}
                 </div>
                 <div class="form-group">
-                    <label for="patient_age">Patient Age</label>
+                    <label for="patient_age">العمر</label>
                     {!! Form::number('patient_age',null,[
                         'class'=>'form-control'
                     ]) !!}
                 </div>
 
                 <div class="form-group">
-                    <label for="phone">Phone</label>
+                    <label for="phone">الهاتف</label>
                     {!! Form::text('phone',null,[
                         'class'=>'form-control'
                     ]) !!}
 
                     <div class="form-group">
-                        <label for="hospital_name">Hospital Name</label>
+                        <label for="hospital_name">اسم المستشفى</label>
                         {!! Form::text('hospital_name',null,[
                             'class'=>'form-control'
                         ]) !!}
                     </div>
 
                     <div class="form-group">
-                        <label for="hospital_address">Hospital Address</label>
+                        <label for="hospital_address">عنوان المستشفى</label>
                         {!! Form::text('hospital_address',null,[
                             'class'=>'form-control'
                         ]) !!}
                     </div>
                     <div class="form-group">
-                        <label for="notes">Notes</label>
+                        <label for="notes">ملاحظات</label>
                         {!! Form::textarea('notes',null,[
                             'class'=>'form-control'
                         ]) !!}
                     </div>
                     <div class="form-group">
-                        <label for="blood_bags">Blood Bags</label>
-                        {!! Form::number('blood_bags',null,[
+                        <label for="blood_bags">أكياس الدم</label>
+                        {!! Form::number('bags_num',null,[
                             'class'=>'form-control'
                         ]) !!}
                     </div>
 
                     <div class="form-group">
-                        <label for="blood_type">Blood Type</label>
+                        <label for="blood_type">فصيلة الدم</label>
                         {!! Form::select('blood_type_id',$bloodtypes,[],[
                             'class'=>'form-control'
                         ]) !!}
                     </div>
 
                     <div class="form-group">
-                        <label for="city">City</label>
+                        <label for="city">المدينة</label>
                         {!! Form::select('city_id',$cities,[],[
                             'class'=>'form-control'
                         ]) !!}
                     </div>
 
                     <div class="form-group">
-                        <button class="btn btn-primary" type="submit"> Update</button>
+                        <button class="btn btn-primary" type="submit"> تحديث</button>
                     </div>
                 </div>
 

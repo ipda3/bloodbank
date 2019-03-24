@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('page_title')
-    Posts
+    المقالات
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
 
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Create Post</h3>
+                <h3 class="box-title">إضافة مقال</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="box-body">
-                <a href="{{url(route('posts.create'))}}" class="btn btn-primary"><i class="fa fa-plus"></i> New Post</a>
+                <a href="{{url(route('posts.create'))}}" class="btn btn-primary"><i class="fa fa-plus"></i> أضف مقال</a>
                 @include('flash::message')
                 @if(count($records))
                     <div class="table-responsive">
@@ -29,17 +29,17 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th class="text-center">Title</th>
-                                <th class="text-center">Category</th>
-                                <th class="text-center">Content</th>
-                                <th class="text-center">Image</th>
-                                <th class="text-center">Edit</th>
-                                <th class="text-center">Delete</th>
+                                <th class="text-center">العنوان</th>
+                                <th class="text-center">القسم</th>
+                                <th class="text-center">المحتوى</th>
+                                <th class="text-center">الصورة</th>
+                                <th class="text-center">تعديل </th>
+                                <th class="text-center">حذف</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($records as $record)
-                                <tr>
+                                <tr id="removable{{$record->id}}">
                                     <td>{{$loop->iteration}}</td>
                                     <td class="text-center">{{$record->title}}</td>
                                     <td class="text-center">{{$record->category->name}}</td>
@@ -55,15 +55,10 @@
                                     </td>
 
                                     <td class="text-center">
-                                        {!!Form::open([
-                                        'action' =>['PostController@destroy',$record->id],
-                                        'method' =>'delete'
-
-                                        ]) !!}
-                                        <button type="submit" class="btn btn-danger btn-xs">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                        {!! Form::close() !!}
+                                        <button id="{{$record->id}}" data-token="{{ csrf_token() }}"
+                                                data-route="{{URL::route('posts.destroy',$record->id)}}"
+                                                type="button" class="destroy btn btn-danger btn-xs"><i
+                                                class="fa fa-trash-o"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -71,9 +66,7 @@
                         </table>
                     </div>
                 @else
-                    <div class="alert alert-danger" role="alert">
-                        No Data
-                    </div>
+                    <p class="text-center"> لا يوجد اى مقالات</p>
                 @endif
             </div>
 

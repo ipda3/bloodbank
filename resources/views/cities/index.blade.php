@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('page_title')
-    Cities
+    المدن
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
 
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">Create City</h3>
+
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="box-body">
-                <a href="{{url(route('cities.create'))}}" class="btn btn-primary"><i class="fa fa-plus"></i> New City</a>
+                <a href="{{url(route('cities.create'))}}" class="btn btn-primary"><i class="fa fa-plus"> </i>أضف مدينة</a>
                 @include('flash::message')
                 @if(count($records))
                     <div class="table-responsive">
@@ -29,15 +29,15 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th class="text-center">Name</th>
-                                <th class="text-center">Governorates</th>
-                                <th class="text-center">Edit</th>
-                                <th class="text-center">Delete</th>
+                                <th class="text-center">المدينة</th>
+                                <th class="text-center">المحافظة</th>
+                                <th class="text-center">تعديل</th>
+                                <th class="text-center">حذف</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($records as $record)
-                                <tr>
+                                <tr id="removable{{$record->id}}">
                                     <td>{{$loop->iteration}}</td>
                                     <td class="text-center">{{$record->name}}</td>
                                     <td class="text-center">{{$record->governorate->name}}</td>
@@ -47,15 +47,10 @@
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        {!!Form::open([
-                                        'action' =>['CityController@destroy',$record->id],
-                                        'method' =>'delete'
-
-                                        ]) !!}
-                                        <button type="submit" class="btn btn-danger btn-xs">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                        {!! Form::close() !!}
+                                        <button id="{{$record->id}}" data-token="{{ csrf_token() }}"
+                                                data-route="{{URL::route('cities.destroy',$record->id)}}"
+                                                type="button" class="destroy btn btn-danger btn-xs"><i
+                                                class="fa fa-trash-o"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -64,7 +59,7 @@
                     </div>
                 @else
                     <div class="alert alert-danger" role="alert">
-                        No Data
+                       لا توجد بيانات
                     </div>
                 @endif
             </div>
