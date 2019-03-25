@@ -38,7 +38,7 @@ class CityController extends Controller
             'governorate_id' => 'required'
         ];
         $message = [
-            'name.required' => 'name is required'
+            'name.required' => 'الاسم مطلوب'
         ];
         $this->validate($request, $rules, $message);
         $record = City::create($request->all());
@@ -80,7 +80,7 @@ class CityController extends Controller
     {
         $record = City::findOrFail($id);
         $record->update($request->all());
-        flash()->success('<p class="text-center" style="font-size:20px; font-weight:900;font-family:Arial" >لقـــد تـــــــم التحــديــــــــث بنــجـــــــاح</p>');
+        flash()->success('لقـــد تـــــــم التحــديــــــــث بنــجـــــــاح');
         return redirect(route('cities.index'));
     }
 

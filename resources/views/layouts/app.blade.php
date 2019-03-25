@@ -135,7 +135,7 @@
             تصميم وبرمجة شركة ابداع تك
         </div>
         <!-- Default to the left -->
-        <strong>&copy; {{date('Y')}} <a href="#">{{config('app.name')}}</a>.</strong> جميع الحقوق محفوظة
+        <strong>&copy; {{date('Y')}} <a href="{{url('admin/home')}}">{{config('app.name')}}</a>.</strong> جميع الحقوق محفوظة
     </footer>
 
     <!-- Control Sidebar -->

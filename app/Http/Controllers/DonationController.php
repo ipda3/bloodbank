@@ -69,13 +69,7 @@ class DonationController extends Controller
         return view('donations.edit', compact('model', 'bloodtypes', 'cities'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         $rules = [
@@ -92,7 +86,7 @@ class DonationController extends Controller
         $this->validate($request, $rules);
         $record = DonationRequest::findOrFail($id);
         $record->update($request->all());
-        flash()->success('<p style="text-align: center;font-weight: bolder">تــم التحديث</p>');
+        flash()->success('تــم التحديث');
         return redirect(route('donations.index'));
     }
 

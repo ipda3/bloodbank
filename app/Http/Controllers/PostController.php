@@ -31,12 +31,7 @@ class PostController extends Controller
         return view('posts.create',compact('categories'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $this->validate($request, array(
@@ -89,19 +84,30 @@ class PostController extends Controller
         return view('posts.edit',compact('model'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
+        $this->validate($request, array(
+            'title' => 'required',
+            'content' => 'required',
+            'thumbnail' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'category_id' => 'required',
+            'publish_date' => 'required',
+        ));
         $record = Post::findOrFail($id);
         $record->update($request->all());
-        flash()->success('<p class="text-center" style="font-size:20px; font-weight:900;font-family:Arial" >لقـــد تـــــــم التحــديــــــــث بنــجـــــــاح</p>');
-        return redirect(route('posts.index'));
+
+        if($request->hasFile('thumbnail')){
+        $thumbnail = $request->file('thumbnail');
+        $filename = time() . '.' . $thumbnail->getClientOriginalExtension();
+        Image::make($thumbnail)->resize(100, 100)->save( public_path('/uploads/' . $filename ) );
+        $record->thumbnail = $filename;
+            $record->save();
+        }
+
+
+        flash()->success('تم التحديث بنجاح');
+        return redirect('admin/posts');
     }
 
     /**
