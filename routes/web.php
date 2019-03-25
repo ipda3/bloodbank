@@ -31,6 +31,7 @@ Route::group(['middleware'=>'auth' , 'prefix'=>'admin'],function() {
     Route::resource('contacts','ContactController');
     Route::resource('reports','ReportController');
     Route::resource('clients','ClientController');
+    Route::resource('settings','SettingController');
     // User reset password
     Route::get('user/change-password','UserController@changePassword');
     Route::post('user/change-password','UserController@changePasswordSave');

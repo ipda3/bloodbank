@@ -79,7 +79,7 @@
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
+                    {{--<img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">--}}
                 </div>
                 <div class="pull-left info">
                     <p> </p>
@@ -97,6 +97,7 @@
                 <li><a href="{{url(route('donations.index'))}}"><i class="fa fa-heart"></i> <span class="text-bold">التبرعات</span></a></li>
                 <li><a href="{{url(route('contacts.index'))}}"><i class="fa fa-phone"></i> <span class="text-bold">تواصل معنا</span></a></li>
                 <li><a href="{{url('admin/user/change-password')}}"><i class="fa fa-key"></i> <span class="text-bold">تغيير كلمة المرور </span></a></li>
+                <li><a href="{{url(route('settings.index'))}}"><i class="fa fa-cogs"></i> <span class="text-bold">الإعدادات </span></a></li>
                 {{--<li><a href="{{url(route('reports.index'))}}"><i class="fa fa-book"></i> <span class="text-bold">التقارير</span></a></li>--}}
                 {{--<li><a href="{{url(route('settings.view'))}}"><i class="fa fa-book"></i> <span>Settings</span></a></li>--}}
 
