@@ -13,7 +13,7 @@ class Notification extends Model
 
     public function clients()
     {
-        return $this->belongsToMany(Client::class)->withPivot('is_read');
+        return $this->belongsToMany('App\Models\Client')->withPivot('is_read');
     }
 
 }

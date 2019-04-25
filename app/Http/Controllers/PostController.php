@@ -52,7 +52,7 @@ class PostController extends Controller
             $filename = time() . '.' . $thumbnail->getClientOriginalExtension();
             Image::make($thumbnail)->resize(300, 300)->save( public_path('/uploads/' . $filename ) );
             $post->thumbnail = $filename;
-            $post->save();
+
         };
 
         $post->save();

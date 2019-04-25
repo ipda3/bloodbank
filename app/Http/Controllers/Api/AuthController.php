@@ -207,7 +207,7 @@ class AuthController extends Controller
 
         if ($request->has('governorates'))
         {
-            $request->user()->governorates()->sync($request->governorates);
+            $request->user()->governorates()->attach($request->governorates);
         }
 
         if ($request->has('blood_types'))
@@ -230,7 +230,7 @@ class AuthController extends Controller
     {
         $validation = validator()->make($request->all(), [
             'token' => 'required',
-            'platform' => 'required|in:android,ios'
+            'type' => 'required|in:android,ios'
 
         ]);
 

@@ -38,7 +38,8 @@ class CityController extends Controller
             'governorate_id' => 'required'
         ];
         $message = [
-            'name.required' => 'الاسم مطلوب'
+            'name.required' => 'الاسم مطلوب',
+            'governorate_id.required' => 'المحافظة مطلوبة ',
         ];
         $this->validate($request, $rules, $message);
         $record = City::create($request->all());
@@ -79,7 +80,7 @@ class CityController extends Controller
     public function update(Request $request, $id)
     {
         $record = City::findOrFail($id);
-        $record->update($request->all());
+            $record->update($request->all());
         flash()->success('لقـــد تـــــــم التحــديــــــــث بنــجـــــــاح');
         return redirect(route('cities.index'));
     }

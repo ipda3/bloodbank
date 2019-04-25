@@ -42,7 +42,7 @@ class Client extends Authenticatable
         return $this->hasMany('App\Models\Contact');
     }
 
-    public function bloodtypes()
+            public function bloodtypes()
     {
         return $this->belongsToMany('App\Models\BloodType','blood_type_client','client_id','blood_type_id');
     }
