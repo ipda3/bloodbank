@@ -10,7 +10,7 @@ class Post extends Model
     protected $table = 'posts';
     public $timestamps = true;
     protected $fillable = array('client_id', 'title', 'content', 'thumbnail', 'publish_date', 'category_id');
-    protected $appends = array('thumbnail_full_path','is_favourite');
+    protected $appends = array('thumbnail_full_path','is_favourite'); // getIsFavouriteAttribute()
 
     public function category()
     {

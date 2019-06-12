@@ -89,7 +89,13 @@ class AuthController extends Controller
             return responseJson(0,$validation->errors()->first(),$data);
         }
 
-        $loginUser = $request->user();
+        // auth()->user(); // user -> web
+        // auth()->guard('api')->user() // user -> api
+        // $request->user() // user -> middleware guard
+
+        $loginUser = $request->user(); // object Client Model
+        // eq = Client::where('api_token',$request->api_token)->first();
+        // Laravel Documentation - Authentication
         $loginUser->update($request->all());
 
 
@@ -199,6 +205,7 @@ class AuthController extends Controller
             'governorates.*' => 'exists:governorates,id',
             'blood_types.*' => 'exists:blood_types,id',
         ];
+        // governorates == [1,5,13]
         $validator = validator()->make($request->all(),$rules);
         if ($validator->fails())
         {
@@ -207,7 +214,10 @@ class AuthController extends Controller
 
         if ($request->has('governorates'))
         {
-            $request->user()->governorates()->sync($request->governorates);
+            // 1,2
+            // sync (1,3,4)
+            // 1,3,4
+            $request->user()->governorates()->sync($request->governorates); // attach - detach() - toggle() - sync
         }
 
         if ($request->has('blood_types'))
@@ -216,7 +226,9 @@ class AuthController extends Controller
         }
 
         $data = [
-            'governorates' => $request->user()->governorates()->pluck('governorates.id')->toArray(),
+            'governorates' => $request->user()->governorates()->pluck('governorates.id')->toArray(), // [1,3,4]
+            // {name: asda , 'created' : asdasd , id: asdasd}
+            // [1,5,13]
             'blood_types' => $request->user()->bloodtypes()->pluck('blood_types.id')->toArray(),
         ];
         return responseJson(1,'تم  التحديث',$data);

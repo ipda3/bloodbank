@@ -21,6 +21,8 @@ class MainController extends Controller
     public function posts(Request $request)
     {
         RequestLog::create(['content' => $request->all(), 'service' => 'posts']);
+        // with('relation_name')
+        // load('city') lazy eager loading
         $posts = Post::with('category')->where(function($post) use($request){
             if ($request->input('category_id'))
             {
