@@ -142,7 +142,7 @@ class MainController extends Controller
                          $q->where('blood_types.id', $donationRequest->blood_type_id);
                      })->pluck('clients.id')->toArray();
 
-       dd($clientsIds);
+//       dd($clientsIds);
         $send = "";
         if (count($clientsIds)) {
             // create a notification on database
