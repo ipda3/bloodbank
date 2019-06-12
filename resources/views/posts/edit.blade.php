@@ -1,8 +1,8 @@
 @extends('layouts.app')
 @section('page_title')
-    إضافة مقال
+    تعديل مقال
 @endsection
-
+@inject('categories','App\Models\Category')
 @section('content')
 
 
@@ -21,12 +21,12 @@
                 </div>
             </div>
             <div class="box-body">
-                {!! Form::open([
-                'action' => 'PostController@store',
+                {!! Form::model($model,[
+                'action' => ['PostController@update',$model->id],
+                'method' => 'put',
                 'files'=>   true,
-                'method' => 'post',
-                'enctype' =>'multipart/form-data'
                 ]) !!}
+
                 @include('partials.validation_errors')
                 <div class="form-group">
                     <label for="name">العنوان</label>
@@ -38,17 +38,16 @@
                     'class' => 'form-control'
                  ]) !!}
                     <label class="form-control" for="image">اختر صورة : </label>
-                    {!! Form::file('thumbnail', [
-                    'class'=>'form-control'
-
+                    <img src="<?php echo asset("uploads/$model->thumbnail")?>"/>
+                   {!! Form::file('thumbnail',null,[
+                   'class' => 'form-control file_upload_preview'
                    ]) !!}
-
                     <label class="form-control" for="select">القسم :</label>
-                    {!! Form::select('category_id',$categories,null,[
+                    {!! Form::select('category_id',$categories->pluck('name','id')->toArray(),null,[
                         'class' => 'form-control'
                      ]) !!}
                     <label class="form-control" for="publish_date">تاريخ النشر :  </label>
-                    {{ Form::date('publish_date', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
+                    {{ Form::date('publish_date', null, ['class' => 'form-control']) }}
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary" type="submit"> حفظ</button>

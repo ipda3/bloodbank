@@ -242,7 +242,7 @@ class AuthController extends Controller
     {
         $validation = validator()->make($request->all(), [
             'token' => 'required',
-            'platform' => 'required|in:android,ios'
+            'type' => 'required|in:android,ios'
 
         ]);
 

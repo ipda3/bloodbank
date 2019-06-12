@@ -2,7 +2,7 @@
 @section('page_title')
     تعديل المدينة
 @endsection
-
+@inject('governorates','App\Models\Governorate')
 @section('content')
 
 
@@ -33,6 +33,14 @@
                     'class' => 'form-control'
                  ]) !!}
                 </div>
+
+                <div class="form-group">
+                    <label for="name">المحافظة</label>
+                    {!! Form::select('governorate_id',$governorates->pluck('name','id')->toArray(),null,[
+                    'class' => 'form-control'
+                 ]) !!}
+                </div>
+
                 <div class="form-group">
                     <button class="btn btn-primary" type="submit">تعديل</button>
                 </div>

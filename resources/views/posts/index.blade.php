@@ -69,7 +69,7 @@
                     <p class="text-center"> لا يوجد اى مقالات</p>
                 @endif
             </div>
-
+            <div class="text-center "> {!! $records->links() !!}</div>
         </div>
 
 

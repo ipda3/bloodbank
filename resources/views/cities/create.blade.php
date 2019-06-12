@@ -31,7 +31,10 @@
                     {!! Form::text('name',null,[
                     'class' => 'form-control'
                  ]) !!}
-                    {!!Form::select('governorate_id',$governorates,[
+                </div>
+                <div class="form-group">
+                    {!! Form::select('governorate_id',$governorates,null,[
+                    'placeholder' => 'اختر المحافظة',
                      'class' => 'form-control'
                      ])!!}
                 </div>

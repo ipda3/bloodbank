@@ -20,8 +20,8 @@ class CreateDonationRequestsTable extends Migration {
 			$table->integer('city_id');
 			$table->string('phone');
 			$table->text('notes')->nullable();
-			$table->double('latitude', 10,10)->nullable();
-			$table->double('longitude', 10,10)->nullable();
+			$table->decimal('latitude', 10,10)->nullable();
+			$table->decimal('longitude', 10,10)->nullable();
 		});
 	}
 

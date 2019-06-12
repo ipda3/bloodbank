@@ -14,6 +14,8 @@
 
 
 Route::get('/', function () {
+    /*$today = now();
+    dd($today);*/
     return view('welcome');
 
 });

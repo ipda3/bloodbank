@@ -137,11 +137,12 @@ class MainController extends Controller
 
 
         // find clients suitable for this donation request
-        $clientsIds = $donationRequest->city->governorate->clients()
-            ->whereHas('bloodtypes', function ($q) use ($request,$donationRequest) {
-                $q->where('blood_types.id', $donationRequest->blood_type_id);
-            })->pluck('clients.id')->toArray();
+         $clientsIds = $donationRequest()->city()->governorate()->clients()
+                     ->whereHas('bloodtypes', function ($q) use ($request,$donationRequest) {
+                         $q->where('blood_types.id', $donationRequest->blood_type_id);
+                     })->pluck('clients.id')->toArray();
 
+       dd($clientsIds);
         $send = "";
         if (count($clientsIds)) {
             // create a notification on database
@@ -228,6 +229,7 @@ class MainController extends Controller
 
     public function contact(Request $request)
     {
+
         RequestLog::create(['content' => $request->all(), 'service' => 'contact us']);
         $rules = [
             'title' => 'required',
