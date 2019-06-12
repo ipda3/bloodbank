@@ -106,13 +106,6 @@ class AuthController extends Controller
 
         $loginUser->save();
 
-        if ($request->has('governorate_id'))
-        {
-
-            $loginUser->governorates()->detach($request->governorate_id);
-            $loginUser->governorates()->attach($request->governorate_id);
-        }
-
         $data = [
             'client' => $request->user()->fresh()->load('city.governorate','bloodType')
         ];
