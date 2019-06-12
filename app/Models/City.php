@@ -12,9 +12,9 @@ class City extends Model
     protected $fillable = array('name', 'governorate_id');
 
 
-    public function client()
+    public function clients()
     {
-        return $this->belongsTo(Client::class);
+        return $this->hasMany(Client::class);
     }
 
     public function donations()
@@ -27,9 +27,6 @@ class City extends Model
         return $this->belongsTo('App\Models\Governorate');
     }
 
-    public function city()
-    {
-        return $this->belongsToMany('App\Models\City');
-    }
+
 
 }

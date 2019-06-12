@@ -8,6 +8,7 @@ use App\Models\City;
 use App\Models\Contact;
 use App\Models\DonationRequest;
 use App\Models\Governorate;
+use App\Models\Notification;
 use App\Models\Post;
 use App\Models\Client;
 use App\Models\RequestLog;
@@ -56,6 +57,7 @@ class MainController extends Controller
                 $query->where('blood_type_id', $request->blood_type_id);
             }
         })->with('city', 'client','bloodType')->latest()->paginate(10);
+
         return responseJson(1, 'success', $donations);
     }
 
@@ -76,6 +78,11 @@ class MainController extends Controller
         if (!$donation) {
             return responseJson(0, '404 no donation found');
         }
+        // DonationRequest::doesnthave('notification')->delete();
+        $request->user()->notifications()->updateExistingPivot($donation->notification->id, [
+            'is_read' => 1
+        ]);
+
         return responseJson(1, 'success', $donation);
     }
 
@@ -173,9 +180,16 @@ class MainController extends Controller
 
     public function notificationsCount(Request $request)
     {
-        return responseJson(1, 'loaded...', [
-            'notifications_count' => $request->user()->notifications()->count()
+         $count = $request->user()->notifications()->where(function ($query) use ($request) {
+
+                $query->where('is_read',0);
+
+        })->count();
+        return responseJson(1, 'loaded...',[
+            'notifications-count' => $count
         ]);
+           // 'notifications_count' => $request->user()->notifications()->count()
+
     }
 
     public function notifications(Request $request)
@@ -208,7 +222,7 @@ class MainController extends Controller
 
     public function myFavourites(Request $request)
     {
-        $posts = $request->user()->favourites()->latest()->paginate(20);// oldest()
+        $posts = $request->user()->favourites()->with('category')->latest()->paginate(20);// oldest()
         return responseJson(1, 'Loaded...', $posts);
     }
 

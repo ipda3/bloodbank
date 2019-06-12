@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('page_title')
-    Governorates
+    المحافظات
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
 
         <div class="box">
             <div class="box-header with-border">
-                <h3 class="box-title">List of governorates</h3>
+                <h3 class="box-title">كل المحافظات</h3>
 
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="box-body">
-                <a href="{{url(route('governorates.create'))}}" class="btn btn-primary"><i class="fa fa-plus"></i> New Governorate</a>
+                <a href="{{url(route('governorates.create'))}}" class="btn btn-primary"><i class="fa fa-plus"> </i>  إضافة محافظة </a>
                 @include('flash::message')
                 @if(count($records))
                     <div class="table-responsive">
@@ -29,14 +29,14 @@
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
-                                <th class="text-center">Edit</th>
-                                <th class="text-center">Delete</th>
+                                <th>الإسم</th>
+                                <th class="text-center">تعديل</th>
+                                <th class="text-center">حذف</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach($records as $record)
-                                <tr>
+                                <tr id="removable{{$record->id}}">
                                     <td>{{$loop->iteration}}</td>
                                     <td>{{$record->name}}</td>
                                     <td class="text-center">
@@ -45,15 +45,10 @@
                                         </a>
                                     </td>
                                     <td class="text-center">
-                                        {!!Form::open([
-                                        'action' =>['GovernorateController@destroy',$record->id],
-                                        'method' =>'delete'
-
-                                        ]) !!}
-                                        <button type="submit" class="btn btn-danger btn-xs">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                        {!! Form::close() !!}
+                                        <button id="{{$record->id}}" data-token="{{ csrf_token() }}"
+                                                data-route="{{URL::route('governorates.destroy',$record->id)}}"
+                                                type="button" class="destroy btn btn-danger btn-xs"><i
+                                                class="fa fa-trash-o"></i></button>
                                     </td>
                                 </tr>
                             @endforeach

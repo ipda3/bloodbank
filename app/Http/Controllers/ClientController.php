@@ -81,9 +81,28 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        $record = Client::findOrFail($id);
+        $record = Client::find($id);
+        if (!$record) {
+            return response()->json([
+                    'status' => 0,
+                    'message' => 'تعذر الحصول على البيانات',
+                ]);
+        }
+
+
+        if ($record->requests()->count() || $record->contacts()->count()) {
+            return response()->json([
+                    'status' => 0,
+                    'message' => 'يوجد عمليات مرتبطة بهذا العميل',
+                ]);
+        }
+
         $record->delete();
-        flash()->error('<p class="text-center" style="font-size:20px; font-weight:900;font-family:Arial" >تـــم الحــذف </p>');
-        return back();
+        return response()->json([
+            'status' => 1,
+            'message' => 'تم الحذف بنجاح',
+            'id' => $id,
+        ]);
     }
+
 }

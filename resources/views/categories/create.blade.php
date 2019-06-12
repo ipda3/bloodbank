@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @inject('model','App\Models\Category')
 @section('page_title')
-    Create Category
+   إضافة قسم
 @endsection
 
 @section('content')

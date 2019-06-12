@@ -114,7 +114,7 @@ class AuthController extends Controller
         }
 
         $data = [
-            'user' => $request->user()->fresh()->load('city.governorate','bloodType')
+            'client' => $request->user()->fresh()->load('city.governorate','bloodType')
         ];
         return responseJson(1,'تم تحديث البيانات',$data);
     }

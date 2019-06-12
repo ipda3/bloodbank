@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @inject('model','App\Models\Governorate')
 @section('page_title')
-    Create Post
+    إضافة مقال
 @endsection
 
 @section('content')
@@ -30,29 +30,29 @@
                 ]) !!}
                 @include('partials.validation_errors')
                 <div class="form-group">
-                    <label for="name">Title</label>
+                    <label for="name">العنوان</label>
                     {!! Form::text('title',null,[
                     'class' => 'form-control'
                  ]) !!}
-                    <label for="name">Content</label>
+                    <label for="name">المحتوى</label>
                     {!! Form::text('content',null,[
                     'class' => 'form-control'
                  ]) !!}
-                    <label class="form-control" for="image">Choose an image : </label>
+                    <label class="form-control" for="image">اختر صورة : </label>
                     {!! Form::file('thumbnail', [
                     'class'=>'form-control'
 
                    ]) !!}
 
-                    <label class="form-control" for="select">Select the category:</label>
+                    <label class="form-control" for="select">القسم :</label>
                     {!! Form::select('category_id',$categories,null,[
                         'class' => 'form-control'
                      ]) !!}
-                    <label class="form-control" for="publish_date">Publish date :  </label>
+                    <label class="form-control" for="publish_date">تاريخ النشر :  </label>
                     {{ Form::date('publish_date', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary" type="submit"> Create</button>
+                    <button class="btn btn-primary" type="submit"> حفظ</button>
                 </div>
 
                 {!! Form::close () !!}

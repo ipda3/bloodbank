@@ -6,11 +6,11 @@
     <header class="main-header">
         <!-- Logo -->
 
-        <a href="{{url(route('home'))}}" class="logo">
+        <a href="{{url('admin/home')}}" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>Blood</b>Bank</span>
+            <span class="logo-mini"><b>تطبيق بنك  </b>الدم</span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Blood</b>Bank</span>
+            <span class="logo-lg"><b>تطبيق بنك  </b>الدم</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -31,30 +31,41 @@
                             <img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="user-image" alt="User Image">
                             <span class="hidden-xs"></span>
                         </a>
-                        <ul class="dropdown-menu">
-                            <!-- User image -->
-                            <li class="user-header">
-                                <img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
+                        {{--<ul class="dropdown-menu">--}}
+                            {{--<!-- User image -->--}}
+                            {{--<li class="user-header">--}}
+                                {{--<img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">--}}
 
-                                <p>
+                                {{--<p>--}}
 
-                                    <small>Member since Nov. 2012</small>
-                                </p>
-                            </li>
+                                    {{--<small>Member since Nov. 2012</small>--}}
+                                {{--</p>--}}
+                            {{--</li>--}}
                             <!-- Menu Body -->
 
                             <!-- Menu Footer-->
-                            <li class="user-footer">
 
-                                <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                                </div>
-                            </li>
+                                <li>
+                                    <script type="">
+                                        function submitSignout() {
+                                            document.getElementById('signoutForm').submit();
+
+                                        }
+                                    </script>
+                                    {!! Form::open(['method' => 'post', 'url' => url('logout'),'id'=>'signoutForm']) !!}
+
+                                    {!! Form::close() !!}
+
+                                    <a href="#" onclick="submitSignout()">
+                                        <i class="fa fa-sign-out"></i> تسجيل الخروج
+                                    </a>
+                                </li>
+
                         </ul>
-                    </li>
+                    {{--</li>--}}
                     <!-- Control Sidebar Toggle Button -->
 
-                </ul>
+                {{--</ul>--}}
             </div>
         </nav>
     </header>
@@ -68,7 +79,7 @@
             <!-- Sidebar user panel -->
             <div class="user-panel">
                 <div class="pull-left image">
-                    <img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">
+                    {{--<img src="{{asset('adminlte/img/user2-160x160.jpg')}}" class="img-circle" alt="User Image">--}}
                 </div>
                 <div class="pull-left info">
                     <p> </p>
@@ -78,14 +89,16 @@
             <ul class="sidebar-menu" data-widget="tree">
 
 
-                <li><a href="{{url(route('governorates.index'))}}"><i class="fa fa-map-marker"></i> <span>Governorates</span></a></li>
-                <li><a href="{{url(route('cities.index'))}}"><i class="fa fa-flag"></i> <span>Cities</span></a></li>
-                <li><a href="{{url(route('categories.index'))}}"><i class="fa fa-list"></i> <span>Categories</span></a></li>
-                <li><a href="{{url(route('posts.index'))}}"><i class="fa fa-comment"></i> <span>Posts</span></a></li>
-                <li><a href="{{url(route('clients.index'))}}"><i class="fa fa-users"></i> <span>Clients</span></a></li>
-                <li><a href="{{url(route('donations.index'))}}"><i class="fa fa-heart"></i> <span>Donations</span></a></li>
-                <li><a href="{{url(route('contacts.index'))}}"><i class="fa fa-phone"></i> <span>Contacts</span></a></li>
-                <li><a href="{{url(route('reports.index'))}}"><i class="fa fa-book"></i> <span>Reports</span></a></li>
+                <li><a href="{{url(route('governorates.index'))}}"><i class="fa fa-map-marker"></i> <span class="text-bold">المحافظات</span></a></li>
+                <li><a href="{{url(route('cities.index'))}}"><i class="fa fa-flag"></i> <span class="text-bold">المدن</span></a></li>
+                <li><a href="{{url(route('categories.index'))}}"><i class="fa fa-list"></i> <span class="text-bold">الأقسام</span></a></li>
+                <li><a href="{{url(route('posts.index'))}}"><i class="fa fa-comment"></i> <span class="text-bold">المقالات</span></a></li>
+                <li><a href="{{url(route('clients.index'))}}"><i class="fa fa-users"></i> <span class="text-bold">العملاء</span></a></li>
+                <li><a href="{{url(route('donations.index'))}}"><i class="fa fa-heart"></i> <span class="text-bold">التبرعات</span></a></li>
+                <li><a href="{{url(route('contacts.index'))}}"><i class="fa fa-phone"></i> <span class="text-bold">تواصل معنا</span></a></li>
+                <li><a href="{{url('admin/user/change-password')}}"><i class="fa fa-key"></i> <span class="text-bold">تغيير كلمة المرور </span></a></li>
+                <li><a href="{{url(route('settings.index'))}}"><i class="fa fa-cogs"></i> <span class="text-bold">الإعدادات </span></a></li>
+                {{--<li><a href="{{url(route('reports.index'))}}"><i class="fa fa-book"></i> <span class="text-bold">التقارير</span></a></li>--}}
                 {{--<li><a href="{{url(route('settings.view'))}}"><i class="fa fa-book"></i> <span>Settings</span></a></li>--}}
 
 
@@ -104,7 +117,7 @@
                 <small>@yield('small_title')</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a href="{{url('/home')}}"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="{{url('admin/home')}}"><i class="fa fa-dashboard"></i>الرئيسية</a></li>
                 <li class="active">@yield('small_title')</li>
 
             </ol>
@@ -115,11 +128,14 @@
     </div>
     <!-- /.content-wrapper -->
 
+    <!-- Main Footer -->
     <footer class="main-footer">
+        <!-- To the right -->
         <div class="pull-right hidden-xs">
-
+            تصميم وبرمجة شركة ابداع تك
         </div>
-
+        <!-- Default to the left -->
+        <strong>&copy; {{date('Y')}} <a href="#">{{config('app.name')}}</a>.</strong> جميع الحقوق محفوظة
     </footer>
 
     <!-- Control Sidebar -->

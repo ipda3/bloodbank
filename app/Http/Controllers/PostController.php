@@ -112,9 +112,20 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $record = Post::findOrFail($id);
+        $record = Post::find($id);
+        if (!$record) {
+            return response()->json([
+                    'status'  => 0,
+                    'message' => 'تعذر الحصول على البيانات'
+                ]);
+        }
+
         $record->delete();
-        flash()->error('<p class="text-center" style="font-size:20px; font-weight:900;font-family:Arial" >تـــم الحــذف </p>');
-        return back();
+        return response()->json([
+                'status'  => 1,
+                'message' => 'تم الحذف بنجاح',
+                'id'      => $id
+            ]);
     }
+
 }

@@ -27,12 +27,7 @@ class GovernorateController extends Controller
         return view('governorates.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $rules = [
@@ -50,7 +45,7 @@ class GovernorateController extends Controller
         $record = Governorate::create($request->all());
 
         flash()->success("تم الإضافة");
-        return redirect(route('governorate.index'));
+        return redirect(route('governorates.index'));
     }
 
     /**
@@ -99,14 +94,25 @@ class GovernorateController extends Controller
      */
     public function destroy($id)
     {
-        $record = Governorate::findOrFail($id);
+        $record = Governorate::find($id);
+        if (!$record) {
+            return response()->json([
+                'status'  => 0,
+                'message' => 'تعذر الحصول على البيانات'
+            ]);
+        }
         if($record->cities()->count())
         {
-            flash()->error("لا يمكن الحذف ،  مدن مرتبطة بالمحافظة");
-            return back();
+            return response()->json([
+                    'status' => 0,
+                    'message' => 'لا يمكن الحذف, يوجد مدن مرتبطة بالمحافظة',
+                ]);
         }
         $record->delete();
-        flash()->success('تم الحذف');
-        return back();
+        return response()->json([
+                'status'  => 1,
+                'message' => 'تم الحذف بنجاح',
+                'id'      => $id
+            ]);
     }
 }

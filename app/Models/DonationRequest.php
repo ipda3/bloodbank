@@ -16,6 +16,11 @@ class DonationRequest extends Model
         return $this->hasMany(Notification::class);
     }
 
+    public function notification()
+    {
+        return $this->hasOne(Notification::class);
+    }
+
     public function city()
     {
         return $this->belongsTo(City::class);

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @inject('model','App\Models\Governorate')
 @section('page_title')
-    Create Cities
+    إضافة مدينة
 @endsection
 
 @section('content')
@@ -27,7 +27,7 @@
                 ]) !!}
                 @include('partials.validation_errors')
                 <div class="form-group">
-                    <label for="name">Name</label>
+                    <label for="name">الإسم</label>
                     {!! Form::text('name',null,[
                     'class' => 'form-control'
                  ]) !!}
@@ -36,7 +36,7 @@
                      ])!!}
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary" type="submit"> Create</button>
+                    <button class="btn btn-primary" type="submit"> حفظ</button>
                 </div>
 
                 {!! Form::close () !!}
