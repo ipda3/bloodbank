@@ -21,13 +21,17 @@ class MainController extends Controller
 {
     public function posts(Request $request)
     {
-        RequestLog::create(['content' => $request->all(), 'service' => 'posts']);
+        //RequestLog::create(['content' => $request->all(), 'service' => 'posts']);
         // with('relation_name')
         // load('city') lazy eager loading
         $posts = Post::with('category')->where(function($post) use($request){
             if ($request->input('category_id'))
             {
                 $post->where('category_id',$request->category_id);
+                $post->whereHas('category',function($category) use($request){
+                    $category->where('name','like','%'.$request->keyword.'%');
+
+                });
             }
 
             if ($request->input('keyword'))
@@ -38,7 +42,7 @@ class MainController extends Controller
                 });
             }
 
-        })->latest()->paginate(10);
+        })->oldest()->toSql();
         return responseJson(1, 'success', $posts);
     }
 
@@ -56,7 +60,7 @@ class MainController extends Controller
             if ($request->input('blood_type_id')) {
                 $query->where('blood_type_id', $request->blood_type_id);
             }
-        })->with('city', 'client','bloodType')->latest()->paginate(10);
+        })->with('city.governorate', 'client','bloodType')->latest()->paginate(10);
 
         return responseJson(1, 'success', $donations);
     }
@@ -108,9 +112,7 @@ class MainController extends Controller
     {
         RequestLog::create(['content' => $request->all(), 'service' => 'cities']);
         $cities = City::where(function ($query) use ($request) {
-            if ($request->has('governorate_id')) {
-                $query->where('governorate_id', $request->governorate_id);
-            }
+
         })->get();
         return responseJson(1, 'success', $cities);
     }
@@ -133,11 +135,40 @@ class MainController extends Controller
             return responseJson(0, $validator->errors()->first(), $validator->errors());
         }
         // create donation request
-        $donationRequest = $request->user()->requests()->create($request->all())->load('city.governorate','bloodType');
+        // $request->user() // according to middleware guard (web - api)
+        // Auth::user() default web
+        // auth()->user() default web
+        // auth()->guard('api')->user()   // auth is optional
+        // auth('api')->user()
+        $donationRequest = $request->user()->requests()->create($request->all())->load('city','bloodType');
+        // 20 post
+        // Post::all(); 1 query
+        // foreach()
+        // {{$post->category->name}} 20 query
+        // total 21 query
+        // Eager Loading
+        // Post::with('category')->all()
+        // 2 queries
+        // get posts  => get Category Ids
+        // get categories by Ids
+        // Nested Eager Loading
+        // ->with('city.governorate')
+        // {
+        //    'name' : 'ahmed',
+        //    'city' : {
+        //              'name': 'Mansourah'
+        //              'governorate': {'name' : 'DHK'}
+        //              }
+        //
+        //
+        // }
+
+        // Lazy Eager Loading
+        //
 
 
         // find clients suitable for this donation request
-         $clientsIds = $donationRequest()->city()->governorate()->clients()
+         $clientsIds = $donationRequest->city()->governorate()->clients()
                      ->whereHas('bloodtypes', function ($q) use ($request,$donationRequest) {
                          $q->where('blood_types.id', $donationRequest->blood_type_id);
                      })->pluck('clients.id')->toArray();
@@ -223,7 +254,8 @@ class MainController extends Controller
 
     public function myFavourites(Request $request)
     {
-        $posts = $request->user()->favourites()->with('category')->latest()->paginate(20);// oldest()
+        $posts = $request->user()->favourites()->with('category')->latest()->paginate(20); // ->toSql ->paginate(20);// oldest()
+        // ->get() ->first() ->find(3) ->all() ||| ->toSql();
         return responseJson(1, 'Loaded...', $posts);
     }
 

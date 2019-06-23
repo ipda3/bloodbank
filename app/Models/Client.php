@@ -6,7 +6,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Client extends Authenticatable
 {
-
     protected $table = 'clients';
     public $timestamps = true;
     protected $fillable = array('name', 'email', 'birth_date', 'city_id','blood_type_id', 'phone',

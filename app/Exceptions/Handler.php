@@ -62,6 +62,7 @@ class Handler extends ExceptionHandler
      */
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        // api/v1/blood-types
         return $request->is('api/*')
             ? responseJson(0,'Unauthenticated.')
             : redirect()->guest($exception->redirectTo() ?? route('login'));
