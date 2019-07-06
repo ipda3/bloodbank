@@ -1,4 +1,3 @@
-
 <div class="form-group">
     <label for="name">الإسم</label>
     {!! Form::text('name',null,[

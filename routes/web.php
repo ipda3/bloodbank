@@ -11,7 +11,18 @@
 |
 */
 
-
+/*
+ *
+ * todo install entrust package
+ * todo create roles module
+ * todo create users module
+ * todo create permissions module
+ * todo apply permissions to project actions
+ * user m-to-m  roles
+ * roles  m-to-m  permissions
+ * // spatie users m-to-m  permissions
+ *
+ */
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,7 +31,7 @@ Route::get('/', function () {
 
 Auth::routes();
 //Admin panel
-Route::group(['middleware'=>'auth' , 'prefix'=>'admin'],function() {
+Route::group(['middleware'=>['auth','auto-check-permission'] , 'prefix'=>'admin'],function() {
 
     Route::get('home', 'HomeController@index');
     Route::resource('governorates','GovernorateController');
@@ -32,6 +43,8 @@ Route::group(['middleware'=>'auth' , 'prefix'=>'admin'],function() {
     Route::resource('reports','ReportController');
     Route::resource('clients','ClientController');
     Route::resource('settings','SettingController');
+    Route::resource('user','UserController');
+    Route::resource('role','RoleController');
     // User reset password
     Route::get('user/change-password','UserController@changePassword');
     Route::post('user/change-password','UserController@changePasswordSave');
