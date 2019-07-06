@@ -174,7 +174,7 @@ function notifyByFirebase($title,$body,$tokens,$data = [])        // paramete 5 
         'notification' => $fcmMsg,
         'data' => $data
     );
-
+    //dd(env('FIREBASE_API_ACCESS_KEY'));
     $headers = array(
          'Authorization: key='.env('FIREBASE_API_ACCESS_KEY'),
          'Content-Type: application/json'

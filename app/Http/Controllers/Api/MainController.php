@@ -28,12 +28,11 @@ class MainController extends Controller
             if ($request->input('category_id'))
             {
                 $post->where('category_id',$request->category_id);
-                $post->whereHas('category',function($category) use($request){
-                    $category->where('name','like','%'.$request->keyword.'%');
-
-                });
+//                $post->whereHas('category',function($category) use($request){
+//                    $category->where('name','like','%'.$request->keyword.'%');
+//                });
             }
-
+            // cat & (title || content)
             if ($request->input('keyword'))
             {
                 $post->where(function($post) use($request){
@@ -42,7 +41,7 @@ class MainController extends Controller
                 });
             }
 
-        })->oldest()->toSql();
+        })->latest()->paginate(20);
         return responseJson(1, 'success', $posts);
     }
 
@@ -82,10 +81,13 @@ class MainController extends Controller
         if (!$donation) {
             return responseJson(0, '404 no donation found');
         }
-        // DonationRequest::doesnthave('notification')->delete();
-        $request->user()->notifications()->updateExistingPivot($donation->notification->id, [
-            'is_read' => 1
-        ]);
+
+        if ($request->user()->notifications()->where('donation_request_id',$donation->id)->first())
+        {
+            $request->user()->notifications()->updateExistingPivot($donation->notification->id, [
+                'is_read' => 1
+            ]);
+        }
 
         return responseJson(1, 'success', $donation);
     }
@@ -168,10 +170,13 @@ class MainController extends Controller
 
 
         // find clients suitable for this donation request
-         $clientsIds = $donationRequest->city()->governorate()->clients()
+        // A+
+         $clientsIds = $donationRequest->city->governorate->clients()
                      ->whereHas('bloodtypes', function ($q) use ($request,$donationRequest) {
                          $q->where('blood_types.id', $donationRequest->blood_type_id);
                      })->pluck('clients.id')->toArray();
+         // clients ids
+        // [3,76,88,16]
 
 //       dd($clientsIds);
         $send = "";
@@ -184,10 +189,20 @@ class MainController extends Controller
             // attach clients to this notofication
             $notification->clients()->attach($clientsIds);
 
+
+
+            // android - account firebase FCM
+            // access key
+            // register device - FCM token
+            // send to api (token - platform [android - ios] - api_token)
+            // store token - tokens [token - platform(ENUM) - client_id] table
+
+            // 2 services : register token - remove token
+
             $tokens = Token::whereIn('client_id',$clientsIds)->where('token','!=',null)->pluck('token')->toArray();
+            // ["asihdgasjdhlasd", "abskdaskldjasd","aksdansd,mamsnd"]
             if (count($tokens))
             {
-                public_path();
                 $title = $notification->title;
                 $body = $notification->content;
                 $data = [

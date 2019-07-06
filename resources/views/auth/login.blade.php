@@ -3,17 +3,20 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Blood Bank</title>
+    <title>{{config('app.name')}}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
     <link rel="stylesheet" href="{{asset('adminlte/plugins/bootstrap/dist/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('adminlte/plugins/bootstrap/dist/css/bootstrap-rtl.min.css')}}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{asset('adminlte/plugins/font-awesome/css/font-awesome.min.css')}}">
     <!-- Ionicons -->
     <link rel="stylesheet" href="{{asset('adminlte/plugins/Ionicons/css/ionicons.min.css')}}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('adminlte/css/AdminLTE.min.css')}}">
+
+    <link rel="stylesheet" href="{{asset('adminlte/css/AdminLTE-rtl.min.css')}}">
     <!-- iCheck -->
     <link rel="stylesheet" href="{{asset('adminlte/plugins/iCheck/square/blue.css')}}">
 
@@ -30,16 +33,16 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="../../index2.html"><b>Blood</b>Bank</a>
+        <a href="{{url('/')}}">{{config('app.name')}}</a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">Sign in to start your session</p>
+        <p class="login-box-msg">قم بتسجيل الدخول</p>
 
         <form action="{{url('/login')}}" method="post">
             {{ csrf_field() }}
             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                <input type="email" class="form-control" placeholder="Email" required="" name="email">
+                <input type="email" class="form-control" placeholder="البريد الالكتروني" required="" name="email">
                 @if ($errors->has('email'))
                     <span class="help-block">
                     <strong>{{ $errors->first('email') }}</strong>
@@ -54,33 +57,10 @@
                                     </span>
                 @endif
             </div>
-            <div class="row">
-                <div class="col-xs-8">
-                    <div class="checkbox icheck">
-                        <label>
-                            <input type="checkbox"> Remember Me
-                        </label>
-                    </div>
-                </div>
-                <!-- /.col -->
-                <div class="col-xs-4">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
-                </div>
-                <!-- /.col -->
-            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-flat">تسجيل الدخول</button>
         </form>
 
-        <div class="social-auth-links text-center">
-            <p>- OR -</p>
-            <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
-                Facebook</a>
-            <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
-                Google+</a>
-        </div>
-        <!-- /.social-auth-links -->
-
-        <a href="#">I forgot my password</a><br>
-        <a href="register.html" class="text-center">Register a new membership</a>
+        {{--<a href="#">I forgot my password</a><br>--}}
 
     </div>
     <!-- /.login-box-body -->

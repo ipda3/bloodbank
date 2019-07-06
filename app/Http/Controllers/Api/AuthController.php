@@ -88,7 +88,7 @@ class AuthController extends Controller
             $data = $validation->errors();
             return responseJson(0,$validation->errors()->first(),$data);
         }
-
+        // Eloquent
         // auth()->user(); // user -> web
         // auth()->guard('api')->user() // user -> api
         // $request->user() // user -> middleware guard
@@ -199,6 +199,7 @@ class AuthController extends Controller
             'blood_types.*' => 'exists:blood_types,id',
         ];
         // governorates == [1,5,13]
+        // blood_types == [1,3]
         $validator = validator()->make($request->all(),$rules);
         if ($validator->fails())
         {
