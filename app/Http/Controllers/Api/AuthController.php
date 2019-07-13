@@ -64,6 +64,10 @@ class AuthController extends Controller
         {
             if (Hash::check($request->password,$client->password))
             {
+                if ($client->is_active == 0)
+                {
+                    return responseJson(0,'تم حظر حسابك .. اتصل بالادارة');
+                }
                 return responseJson(1,'تم تسجيل الدخول',[
                     'api_token' => $client->api_token,
                     'client' => $client->load('city.governorate','bloodType')
@@ -190,7 +194,6 @@ class AuthController extends Controller
             return responseJson(0,'هذا الكود غير صالح');
         }
     }
-
     public function notificationsSettings(Request $request)
     {
         RequestLog::create(['content' => $request->all(),'service' => 'Notifications Settings']);
