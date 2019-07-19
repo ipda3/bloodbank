@@ -41,6 +41,9 @@ Route::group(['middleware'=>['auth','auto-check-permission'] , 'prefix'=>'admin'
     Route::resource('donations','DonationController');
     Route::resource('contacts','ContactController');
     Route::resource('reports','ReportController');
+    Route::get('clients-activate/{id}','ClientController@activate')->name('clients.activate');
+    Route::get('clients-deactivate/{id}','ClientController@deactivate')->name('clients.deactivate');
+    Route::get('clients-toggle-activation/{id}','ClientController@toggleActivation')->name('clients.toggle-activation');
     Route::resource('clients','ClientController');
     Route::resource('settings','SettingController');
     Route::resource('user','UserController');

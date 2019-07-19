@@ -105,4 +105,36 @@ class ClientController extends Controller
         ]);
     }
 
+    public function activate($id)
+    {
+
+        $client = Client::findOrFail($id);
+        $client->update(['is_active' => 1]);
+        flash()->success('تم التفعيل');
+        return back();
+    }
+
+    public function deactivate($id)
+    {
+        $client = Client::findOrFail($id);
+        $client->update(['is_active' => 0]);
+        flash()->success('تم إلغاء التفعيل');
+        return back();
+    }
+
+    public function toggleActivation($id)
+    {
+        $client = Client::findOrFail($id);
+        $msg = 'تم التفعيل';
+        if ($client->is_active)
+        {
+            $msg = 'تم إلغاء التفعيل';
+            $client->update(['is_active' => 0]);
+        }else{
+            $client->update(['is_active' => 1]);
+        }
+        flash()->success($msg);
+        return back();
+    }
+
 }

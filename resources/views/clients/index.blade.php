@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('page_title')
-   العملاء
+    العملاء
 @endsection
 @section('content')
 
@@ -16,7 +16,8 @@
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
                             title="Collapse">
                         <i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
+                            title="Remove">
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
@@ -35,6 +36,7 @@
                                 <th>فصيلة الدم</th>
                                 <th>اخر تاريخ تبرع بالدم</th>
                                 <th>المدينة</th>
+                                <th class="text-center">تفعيل / الغاء التفعيل</th>
                                 <th class="text-center">حذف</th>
                             </tr>
                             </thead>
@@ -49,12 +51,20 @@
                                     <td>{{optional($record->BloodType)->name}}</td>
                                     <td>{{$record->donation_last_date}}</td>
                                     <td>{{optional($record->city)->name}}</td>
-
+                                    <td class="text-center">
+                                        @if($record->is_active)
+                                            <a href="{{url(route('clients.toggle-activation',$record->id))}}" class="btn btn-danger btn-xs">إلغاء
+                                                التفعيل</a>
+                                        @else
+                                            <a href="{{url(route('clients.toggle-activation',$record->id))}}"
+                                               class="btn btn-success btn-xs">تفعيل</a>
+                                        @endif
+                                    </td>
                                     <td class="text-center">
                                         <button id="{{$record->id}}" data-token="{{ csrf_token() }}"
                                                 data-route="{{URL::route('clients.destroy',$record->id)}}"
                                                 type="button" class="destroy btn btn-danger btn-xs"><i
-                                                class="fa fa-trash-o"></i></button>
+                                                    class="fa fa-trash-o"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -62,7 +72,7 @@
                         </table>
                     </div>
                 @else
-                   <p class="text-center"> لا يوجد عملاء !!</p>
+                    <p class="text-center"> لا يوجد عملاء !!</p>
                 @endif
             </div>
 

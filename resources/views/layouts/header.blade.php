@@ -22,7 +22,7 @@
     {{--<link rel="stylesheet" href="{{asset('adminlte/plugins/font-awesome/css/font-awesome-rtl.min.css')}}">--}}
     {{--<link rel="stylesheet" href="{{asset('adminlte/css/AdminLTE.min.css')}}">--}}
     <link rel="stylesheet" href="{{asset('adminlte/css/AdminLTE-rtl.min.css')}}">
-    <link rel="stylesheet" href="{{asset('adminlte/css/rtl.css') }}">
+{{--    <link rel="stylesheet" href="{{asset('adminlte/css/rtl.css') }}">--}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <!-- Font Awesome -->
 {{--@else--}}

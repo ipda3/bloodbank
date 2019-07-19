@@ -14,6 +14,7 @@ use App\Models\Client;
 use App\Models\RequestLog;
 use App\Models\Log;
 use App\Models\Token;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -171,10 +172,14 @@ class MainController extends Controller
 
         // find clients suitable for this donation request
         // A+
+//        $now = Carbon::now(); // 19/7
+//        $threeMonthsAgo = $now->subMonths(3); // 2019-04-19  // Android Pie
          $clientsIds = $donationRequest->city->governorate->clients()
                      ->whereHas('bloodtypes', function ($q) use ($request,$donationRequest) {
                          $q->where('blood_types.id', $donationRequest->blood_type_id);
-                     })->pluck('clients.id')->toArray();
+                     })
+//             ->where('donation_last_date','<=',$threeMonthsAgo->toDateString())
+             ->pluck('clients.id')->toArray();
          // clients ids
         // [3,76,88,16]
 
