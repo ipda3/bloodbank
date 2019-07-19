@@ -58,7 +58,7 @@ class Client extends Authenticatable
 
     public function bloodType()
     {
-        return $this->belongsTo('App\Models\BloodType');
+        return $this->belongsTo('App\Models\BloodType','blood_type_id');
     }
 
 

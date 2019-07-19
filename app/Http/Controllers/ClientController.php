@@ -10,11 +10,29 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $records = Client::paginate(20);
+        $records = Client::where(function ($query) use($request){
+            if ($request->input('keyword'))
+            {
+                $query->where(function ($query) use($request){
+                    $query->where('name','like','%'.$request->keyword.'%');
+                    $query->orWhere('phone','like','%'.$request->keyword.'%');
+                    $query->orWhere('email','like','%'.$request->keyword.'%');
+                    $query->orWhereHas('city',function ($city) use($request){
+                        $city->where('name','like','%'.$request->keyword.'%');
+                    });
+                });
+            }
+
+            if ($request->input('blood_type_id'))
+            {
+                $query->where('blood_type_id',$request->blood_type_id);
+            }
+        })->paginate(20);
         return view('clients.index',compact('records'));
     }
 
