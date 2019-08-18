@@ -33,7 +33,7 @@ class MainController extends Controller
 //                    $category->where('name','like','%'.$request->keyword.'%');
 //                });
             }
-            // cat & (title || content)
+            // cat & title || content
             if ($request->input('keyword'))
             {
                 $post->where(function($post) use($request){
@@ -115,7 +115,10 @@ class MainController extends Controller
     {
         RequestLog::create(['content' => $request->all(), 'service' => 'cities']);
         $cities = City::where(function ($query) use ($request) {
-
+            if ($request->input('governorate_id'))
+            {
+                $query->where('governorate_id',$request->governorate_id);
+            }
         })->get();
         return responseJson(1, 'success', $cities);
     }
