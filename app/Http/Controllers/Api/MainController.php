@@ -36,10 +36,7 @@ class MainController extends Controller
             // cat & title || content
             if ($request->input('keyword'))
             {
-                $post->where(function($post) use($request){
-                    $post->where('title','like','%'.$request->keyword.'%');
-                    $post->orWhere('content','like','%'.$request->keyword.'%');
-                });
+                $post->searchByKeyword($request);
             }
 
         })->latest()->paginate(20);

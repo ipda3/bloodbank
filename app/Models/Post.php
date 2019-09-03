@@ -28,6 +28,8 @@ class Post extends Model
             $query->where('client_post.client_id',request()->user()->id);
             $query->where('client_post.post_id',$this->id);
         })->first();
+        // client
+        // null
         if ($favourite)
         {
             return true;
@@ -38,6 +40,15 @@ class Post extends Model
     public function favourites()
     {
         return $this->belongsToMany(Client::class);
+    }
+
+
+    public function scopeSearchByKeyword($query,$request)
+    {
+        $query->where(function($post) use($request){
+            $post->where('title','like','%'.$request->keyword.'%');
+            $post->orWhere('content','like','%'.$request->keyword.'%');
+        });
     }
 
 }

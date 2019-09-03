@@ -35,7 +35,7 @@ Route::group(['middleware'=>['auth','auto-check-permission'] , 'prefix'=>'admin'
 
     Route::get('home', 'HomeController@index');
     Route::resource('governorates','GovernorateController');
-    Route::resource('cities','CityController');
+    Route::resource('governorates.cities','CityController');
     Route::resource('categories','CategoryController');
     Route::resource('posts','PostController');
     Route::resource('donations','DonationController');
