@@ -24,9 +24,11 @@
  *
  */
 
-Route::get('/', function () {
-    return view('welcome');
-
+Route::group(['namespace' => 'Front'],function (){//,'middleware' => 'auth:client-web'
+    Route::get('/', 'MainController@home');
+    Route::get('client-register', 'AuthController@register');
+    Route::get('about', 'MainController@about');
+    Route::post('toggle-favourite', 'MainController@toggleFavourite')->name('toggle-favourite');
 });
 
 Auth::routes();
@@ -35,7 +37,7 @@ Route::group(['middleware'=>['auth','auto-check-permission'] , 'prefix'=>'admin'
 
     Route::get('home', 'HomeController@index');
     Route::resource('governorates','GovernorateController');
-    Route::resource('governorates.cities','CityController');
+    Route::resource('cities','CityController');
     Route::resource('categories','CategoryController');
     Route::resource('posts','PostController');
     Route::resource('donations','DonationController');
