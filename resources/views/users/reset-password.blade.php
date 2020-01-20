@@ -35,21 +35,17 @@
                 {{--@include('layouts.partials.validation-errors')--}}
                 {{--{!! field()->password('old-password','كلمة المرور الحالية') !!}--}}
                 <div class="form-group">
-                    <label class="form-control"> كلمة المرور الحالية</label>
+                    <label> كلمة المرور الحالية</label>
                     <input class="form-control" type="password" name="old-password"/>
-
-
-                    <label class="form-control">كلمة المرور الجديدة</label>
+                </div>
+                <div class="form-group">
+                    <label> كلمة المرور الجديدة</label>
                     <input class="form-control" type="password" name="password"/>
-
-
-                    <label class="form-control">تأكيد كلمة المرور الجديدة</label>
+                </div>
+                <div class="form-group">
+                    <label>تأكيد كلمة المرور الجديدة</label>
                     <input class="form-control" type="password" name="password_confirmation"/>
-
-
-
-
-
+                </div>
                 </div>
 
             <!-- /.box -->

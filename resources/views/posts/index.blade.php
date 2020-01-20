@@ -2,38 +2,74 @@
 @section('page_title')
     المقالات
 @endsection
-
+@inject('category','App\Models\Category')
+@php
+    $categories = $category->pluck('name','id')->toArray();
+@endphp
 @section('content')
 
 
     <section class="content">
 
         <div class="box">
-            <div class="box-header with-border">
+            <div class="box-header">
                 <h3 class="box-title">إضافة مقال</h3>
+                <div class="box-header">
+                    {!! Form::open([
+                    'method' => 'get'
+                    ]) !!}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {!! Form::text('title',request()->input('title'),[
+                                'placeholder' => 'العنوان',
+                                'class' => 'form-control'
+                                ]) !!}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {!! Form::select('category_id',$categories,request()->input('category_id'),[
+                                'class' =>'select2 form-control',
+                                'placeholder' => 'اختر القسم'
+                                ]) !!}
+                            </div>
+                        </div>
 
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {!! Form::close() !!}
+                </div>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
                             title="Collapse">
                         <i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
+                            title="Remove">
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
             <div class="box-body">
-                <a href="{{url(route('posts.create'))}}" class="btn btn-primary"><i class="fa fa-plus"></i> أضف مقال</a>
+                <div class="form-group">
+                    <a href="{{url(route('posts.create'))}}" class="btn btn-primary"><i class="fa fa-plus"></i> أضف مقال</a>
+                </div>
                 @include('flash::message')
                 @if(count($records))
                     <div class="table-responsive">
                         <table class="table table-bordered">
-                            <thead>
+                            <thead style="background-color: #3C8DBC; color:#ffffff;">
                             <tr>
                                 <th>#</th>
                                 <th class="text-center">العنوان</th>
                                 <th class="text-center">القسم</th>
                                 <th class="text-center">المحتوى</th>
                                 <th class="text-center">الصورة</th>
-                                <th class="text-center">تعديل </th>
+                                <th class="text-center">تعديل</th>
                                 <th class="text-center">حذف</th>
                             </tr>
                             </thead>
@@ -44,12 +80,14 @@
                                     <td class="text-center">{{$record->title}}</td>
                                     <td class="text-center">{{$record->category->name}}</td>
                                     <td class="text-center">{{$record->content}}</td>
-                                    <td>
-                                        <img src="{{asset('/uploads/' . $record->thumbnail)}}" style="width:200px; height:100px">
+                                    <td class="text-center">
+                                        <img src="{{asset($record->thumbnail)}}"
+                                             style="width:70px; height:70px">
                                     </td>
 
                                     <td class="text-center">
-                                        <a href="{{url(route('posts.edit',$record->id))}}" class="btn btn-success btn-xs">
+                                        <a href="{{url(route('posts.edit',$record->id))}}"
+                                           class="btn btn-success btn-xs">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                     </td>
@@ -66,7 +104,9 @@
                         </table>
                     </div>
                 @else
-                    <p class="text-center"> لا يوجد اى مقالات</p>
+                    <div class="col-md-4 col-md-offset-4 text-center alert alert-info bg-blue">
+                        لاتوجد اى بيانات
+                    </div>
                 @endif
             </div>
             <div class="text-center "> {!! $records->links() !!}</div>

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model 
@@ -10,7 +11,7 @@ class Post extends Model
     protected $table = 'posts';
     public $timestamps = true;
     protected $fillable = array('client_id', 'title', 'content', 'thumbnail', 'publish_date', 'category_id');
-    protected $appends = array('thumbnail_full_path','is_favourite');
+    protected $appends = array('thumbnail_full_path','is_favourite'); // getIsFavouriteAttribute()
 
     public function category()
     {
@@ -28,6 +29,8 @@ class Post extends Model
             $query->where('client_post.client_id',request()->user()->id);
             $query->where('client_post.post_id',$this->id);
         })->first();
+        // client
+        // null
         if ($favourite)
         {
             return true;
@@ -38,6 +41,20 @@ class Post extends Model
     public function favourites()
     {
         return $this->belongsToMany(Client::class);
+    }
+
+
+    public function scopeSearchByKeyword($query,$request)
+    {
+        $query->where(function($post) use($request){
+            $post->where('title','like','%'.$request->keyword.'%');
+            $post->orWhere('content','like','%'.$request->keyword.'%');
+        });
+    }
+
+    public function scopePublished($query)
+    {
+        $query->where('publish_date','<=',Carbon::now()->toDateString());
     }
 
 }

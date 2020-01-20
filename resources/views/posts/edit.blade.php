@@ -16,7 +16,8 @@
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
                             title="Collapse">
                         <i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
+                            title="Remove">
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
@@ -29,25 +30,35 @@
 
                 @include('partials.validation_errors')
                 <div class="form-group">
-                    <label for="name">العنوان</label>
-                    {!! Form::text('title',null,[
-                    'class' => 'form-control'
-                 ]) !!}
-                    <label for="name">المحتوى</label>
-                    {!! Form::text('content',null,[
-                    'class' => 'form-control'
-                 ]) !!}
-                    <label class="form-control" for="image">اختر صورة : </label>
-                    <img src="<?php echo asset("uploads/$model->thumbnail")?>"/>
-                   {!! Form::file('thumbnail',null,[
-                   'class' => 'form-control file_upload_preview'
-                   ]) !!}
-                    <label class="form-control" for="select">القسم :</label>
-                    {!! Form::select('category_id',$categories->pluck('name','id')->toArray(),null,[
+                    <div class="form-group">
+                        <label for="name">العنوان</label>
+                        {!! Form::text('title',null,[
                         'class' => 'form-control'
                      ]) !!}
-                    <label class="form-control" for="publish_date">تاريخ النشر :  </label>
-                    {{ Form::date('publish_date', null, ['class' => 'form-control']) }}
+                    </div>
+                    <div class="form-group">
+                        <label for="name">المحتوى</label>
+                        {!! Form::text('content',null,[
+                        'class' => 'form-control'
+                     ]) !!}
+                    </div>
+                    <div class="form-group">
+                        <label> اختر صورة : </label><br>
+                        <img src="<?php echo asset("$model->thumbnail")?>"/>
+                        {!! Form::file('thumbnail',null,[
+                        'class' => 'form-control file_upload_preview'
+                        ]) !!}
+                    </div>
+                    <div class="form-group">
+                        <label>القسم :</label>
+                        {!! Form::select('category_id',$categories->pluck('name','id')->toArray(),null,[
+                            'class' => 'form-control'
+                         ]) !!}
+                    </div>
+                    <div class="form-group">
+                        <label>تاريخ النشر : </label>
+                        {{ Form::date('publish_date', null, ['class' => 'form-control']) }}
+                    </div>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-primary" type="submit"> حفظ</button>

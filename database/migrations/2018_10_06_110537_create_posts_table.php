@@ -16,6 +16,8 @@ class CreatePostsTable extends Migration {
 			$table->string('thumbnail')->nullable();
 			$table->date('publish_date');
 			$table->integer('category_id');
+			//
+            // git change
 		});
 	}
 

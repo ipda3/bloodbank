@@ -11,12 +11,35 @@
         <div class="box">
             <div class="box-header with-border">
                 <h3 class="box-title">كل الرسائل</h3>
+                <div class="box-header">
+                    {!! Form::open([
+                    'method' => 'get'
+                    ]) !!}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {!! Form::text('keyword',request()->input('keyword'),[
+                                'placeholder' => 'اسم العميل',
+                                'class' => 'form-control'
+                                ]) !!}
+                            </div>
+                        </div>
 
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {!! Form::close() !!}
+                </div>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
                             title="Collapse">
                         <i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip"
+                            title="Remove">
                         <i class="fa fa-times"></i></button>
                 </div>
             </div>
@@ -25,12 +48,12 @@
                 @if(count($records))
                     <div class="table-responsive">
                         <table class="table table-bordered">
-                            <thead>
+                            <thead style="background-color: #3C8DBC; color:#ffffff;">
                             <tr>
                                 <th>#</th>
+                                <th class="text-center">اسم العميل</th>
                                 <th class="text-center">العنوان</th>
                                 <th class="text-center">الرسالة</th>
-                                <th class="text-center">اسم العميل</th>
                                 <th class="text-center">حذف</th>
                             </tr>
                             </thead>
@@ -38,9 +61,9 @@
                             @foreach($records as $record)
                                 <tr id="removable{{$record->id}}">
                                     <td>{{$loop->iteration}}</td>
+                                    <td class="text-center">{{optional($record->client)->name}}</td>
                                     <td class="text-center">{{$record->title}}</td>
                                     <td class="text-center">{{$record->message}}</td>
-                                    <td class="text-center">{{optional($record->client)->name}}</td>
 
                                     <td class="text-center">
                                         <button id="{{$record->id}}" data-token="{{ csrf_token() }}"
@@ -52,9 +75,14 @@
                             @endforeach
                             </tbody>
                         </table>
+                        <div class="text-center">
+                            {!! $records->links() !!}
+                        </div>
                     </div>
                 @else
-                    <p class='text-center h3'>لا توجد رسائل !!</p>
+                    <div class="col-md-4 col-md-offset-4 text-center alert alert-info bg-blue">
+                        لاتوجد اى بيانات
+                    </div>
                 @endif
             </div>
 

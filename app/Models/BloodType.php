@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class BloodType extends Model 
 {
-
     protected $table = 'blood_types';
     public $timestamps = true;
     protected $fillable = array('name');
@@ -16,7 +15,7 @@ class BloodType extends Model
         return $this->belongsToMany('App\Models\Client');
     }
 
-    public function donation()
+    public function donations()
     {
         return $this->hasMany('App\Models\DonationRequest');
     }

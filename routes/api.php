@@ -23,11 +23,10 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Api'],function (){
     Route::get('cities','MainController@cities');
     Route::get('blood-types','MainController@bloodTypes');
     Route::get('categories','MainController@categories');
-    Route::post('register','AuthController@register');
+    Route::post('signup','AuthController@register');
     Route::post('login','AuthController@login');
     Route::post('reset-password', 'AuthController@reset');
     Route::post('new-password', 'AuthController@password');
-   // Route::post('profile', 'AuthController@profile');
 
     Route::group(['middleware'=> 'auth:api'],function (){
         Route::post('register-token', 'AuthController@registerToken');

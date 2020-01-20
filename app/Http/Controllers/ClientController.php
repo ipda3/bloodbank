@@ -10,11 +10,29 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $records = Client::paginate(20);
+        $records = Client::where(function ($query) use($request){
+            if ($request->input('keyword'))
+            {
+                $query->where(function ($query) use($request){
+                    $query->where('name','like','%'.$request->keyword.'%');
+                    $query->orWhere('phone','like','%'.$request->keyword.'%');
+                    $query->orWhere('email','like','%'.$request->keyword.'%');
+                    $query->orWhereHas('city',function ($client) use($request){
+                        $client->where('name','like','%'.$request->keyword.'%');
+                    });
+                });
+            }
+
+            if ($request->input('blood_type_id'))
+            {
+                $query->where('blood_type_id',$request->blood_type_id);
+            }
+        })->paginate(20);
         return view('clients.index',compact('records'));
     }
 
@@ -103,6 +121,38 @@ class ClientController extends Controller
             'message' => 'تم الحذف بنجاح',
             'id' => $id,
         ]);
+    }
+
+    public function activate($id)
+    {
+
+        $client = Client::findOrFail($id);
+        $client->update(['is_active' => 1]);
+        flash()->success('تم التفعيل');
+        return back();
+    }
+
+    public function deactivate($id)
+    {
+        $client = Client::findOrFail($id);
+        $client->update(['is_active' => 0]);
+        flash()->success('تم إلغاء التفعيل');
+        return back();
+    }
+
+    public function toggleActivation($id)
+    {
+        $client = Client::findOrFail($id);
+        $msg = 'تم التفعيل';
+        if ($client->is_active)
+        {
+            $msg = 'تم إلغاء التفعيل';
+            $client->update(['is_active' => 0]);
+        }else{
+            $client->update(['is_active' => 1]);
+        }
+        flash()->success($msg);
+        return back();
     }
 
 }

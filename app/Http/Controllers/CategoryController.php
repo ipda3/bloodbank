@@ -10,11 +10,19 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $records = Category::paginate(10);
+        //
+        $records = Category::where(function ($q)use($request){
+           if($request->name){
+               $q->where('name', 'LIKE', '%' . $request->name . '%');
+           }
+        })->paginate(10);
+
+
         return view('categories.index',compact('records'));
     }
 

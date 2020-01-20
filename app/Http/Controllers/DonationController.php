@@ -14,9 +14,26 @@ class DonationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $records = DonationRequest::paginate(20);
+        $records = DonationRequest::where(function ($query)use($request){
+            if ($request->input('keyword'))
+            {
+                $query->where(function ($query) use($request){
+                    $query->where('patient_name','like','%'.$request->keyword.'%');
+                    $query->orWhere('phone','like','%'.$request->keyword.'%');
+                    $query->orWhere('hospital_name','like','%'.$request->keyword.'%');
+                    $query->orWhereHas('city',function ($city) use($request){
+                        $city->where('name','like','%'.$request->keyword.'%');
+                    });
+                });
+            }
+
+            if ($request->input('blood_type_id'))
+            {
+                $query->where('blood_type_id',$request->blood_type_id);
+            }
+        })->paginate(20);
         return view('donations.index', compact('records'));
     }
 
