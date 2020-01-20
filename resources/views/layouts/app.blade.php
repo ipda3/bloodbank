@@ -89,6 +89,7 @@
             <ul class="sidebar-menu" data-widget="tree">
 
 
+                <li><a href="{{url(route('home'))}}"><i class="fa fa-home"></i> <span class="text-bold">الرئيسية</span></a></li>
                 <li><a href="{{url(route('governorates.index'))}}"><i class="fa fa-map-marker"></i> <span class="text-bold">المحافظات</span></a></li>
                 <li><a href="{{url(route('cities.index'))}}"><i class="fa fa-flag"></i> <span class="text-bold">المدن</span></a></li>
                 <li><a href="{{url(route('categories.index'))}}"><i class="fa fa-list"></i> <span class="text-bold">الأقسام</span></a></li>

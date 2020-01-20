@@ -101,7 +101,7 @@ function page($id)
     }
 }
 
-function responseJson($status, $msg, $data = null)
+function   responseJson($status, $msg, $data = null)
 {
     $response = [
         'status' => $status,

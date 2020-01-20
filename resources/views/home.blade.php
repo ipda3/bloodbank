@@ -14,59 +14,59 @@
 @endsection
 @section('content')
     <!-- Main content -->
-    <section class="content">
-        <div class="row">
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-aqua"><i class="fa fa-user"></i></span>
+        <section class="content">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-aqua"><i class="fa fa-user"></i></span>
 
-                    <div class="info-box-content">
-                        <span class="info-box-text">العملاء</span>
-                        <span class="info-box-number">{{$client->count()}}</span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">العملاء</span>
+                            <span class="info-box-number">{{$client->count()}}</span>
+                        </div>
+                        <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box-content -->
+                    <!-- /.info-box -->
                 </div>
-                <!-- /.info-box -->
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-green"><i class="fa fa-line-chart"></i></span>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-green"><i class="fa fa-line-chart"></i></span>
 
-                    <div class="info-box-content">
-                        <span class="info-box-text">التبرعات</span>
-                        <span class="info-box-number">{{$donation->count()}}</span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">التبرعات</span>
+                            <span class="info-box-number">{{$donation->count()}}</span>
+                        </div>
+                        <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box-content -->
+                    <!-- /.info-box -->
                 </div>
-                <!-- /.info-box -->
-            </div>
 
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-purple"><i class="ion-ios-home"></i></span>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-purple"><i class="ion-ios-home"></i></span>
 
-                    <div class="info-box-content">
-                        <span class="info-box-text">المحافظات</span>
-                        <span class="info-box-number">{{$governorates->count()}}</span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">المحافظات</span>
+                            <span class="info-box-number">{{$governorates->count()}}</span>
+                        </div>
+                        <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box-content -->
+                    <!-- /.info-box -->
                 </div>
-                <!-- /.info-box -->
-            </div>
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-navy"><i class="ion ion-flag"></i></span>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-navy"><i class="ion ion-flag"></i></span>
 
-                    <div class="info-box-content">
-                        <span class="info-box-text">المدن</span>
-                        <span class="info-box-number">{{$cities->count()}}</span>
+                        <div class="info-box-content">
+                            <span class="info-box-text">المدن</span>
+                            <span class="info-box-number">{{$cities->count()}}</span>
+                        </div>
+                        <!-- /.info-box-content -->
                     </div>
-                    <!-- /.info-box-content -->
+                    <!-- /.info-box -->
                 </div>
-                <!-- /.info-box -->
             </div>
-        </div>
-    </section>
+        </section>
              <section class="content">
                  <div class="row">
             <div class="col-md-3 col-sm-6 col-xs-12">

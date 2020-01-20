@@ -12,10 +12,13 @@
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
+    <link rel="stylesheet" href="{{asset('adminlte/plugins/select2/select2.min.css')}}">
+    <link rel="stylesheet" href="{{asset('adminlte/plugins/jquery-ui.min.css')}}">
     <link rel="stylesheet" href="{{asset('adminlte/plugins/bootstrap/dist/css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('adminlte/plugins/bootstrap/dist/css/bootstrap-rtl.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('adminlte/plugins/sweetalert/sweetalert.css')}}">
     <link rel="stylesheet" href="{{asset('adminlte/plugins/font-awesome/css/font-awesome.min.css')}}">
+    <link href="https://fonts.googleapis.com/css?family=Cairo:400,700" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('adminlte/plugins/Ionicons/css/ionicons.min.css')}}">
     <link rel="stylesheet" href="{{asset('adminlte/css/skins/_all-skins.min.css')}}">
     {{--@if(app()->getLocale()== 'ar')--}}

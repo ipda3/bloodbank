@@ -17,6 +17,7 @@ use App\Models\Token;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
 
 class MainController extends Controller
 {
@@ -26,7 +27,7 @@ class MainController extends Controller
         // with('relation_name')
         // load('city') lazy eager loading
         $posts = Post::with('category')->where(function($post) use($request){
-            if ($request->input('category_id'))
+            if ($request->category_id)
             {
                 $post->where('category_id',$request->category_id);
 //                $post->whereHas('category',function($category) use($request){
@@ -34,7 +35,7 @@ class MainController extends Controller
 //                });
             }
             // cat & title || content
-            if ($request->input('keyword'))
+            if ($request->keyword)
             {
                 $post->searchByKeyword($request);
             }
@@ -72,7 +73,7 @@ class MainController extends Controller
         return responseJson(1, 'success', $post);
     }
 
-    public function donationRequest(Request $request)
+    public function  donationRequest(Request $request)
     {
         RequestLog::create(['content' => $request->all(), 'service' => 'donation details']);
         $donation = DonationRequest::with('city', 'client','bloodType')->find($request->donation_id);
@@ -111,7 +112,7 @@ class MainController extends Controller
     public function cities(Request $request)
     {
         RequestLog::create(['content' => $request->all(), 'service' => 'cities']);
-        $cities = City::where(function ($query) use ($request) {
+        $cities = City::with('governorate')->where(function ($query) use ($request) {
             if ($request->input('governorate_id'))
             {
                 $query->where('governorate_id',$request->governorate_id);
@@ -143,7 +144,7 @@ class MainController extends Controller
         // auth()->user() default web
         // auth()->guard('api')->user()   // auth is optional
         // auth('api')->user()
-        $donationRequest = $request->user()->requests()->create($request->all())->load('city','bloodType');
+        $donationRequest = $request->user()->requests()->create($request->all());
         // 20 post
         // Post::all(); 1 query
         // foreach()
@@ -161,7 +162,7 @@ class MainController extends Controller
         //    'city' : {
         //              'name': 'Mansourah'
         //              'governorate': {'name' : 'DHK'}
-        //              }
+        //
         //
         //
         // }
@@ -205,7 +206,7 @@ class MainController extends Controller
             // 2 services : register token - remove token
 
             $tokens = Token::whereIn('client_id',$clientsIds)->where('token','!=',null)->pluck('token')->toArray();
-            // ["asihdgasjdhlasd", "abskdaskldjasd","aksdansd,mamsnd"]
+            //dd($tokens);
             if (count($tokens))
             {
                 $title = $notification->title;
@@ -215,12 +216,13 @@ class MainController extends Controller
                 ];
                 $send = notifyByFirebase($title, $body, $tokens, $data);
                 info("firebase result: " . $send);
-//                info("data: " . json_encode($data));
+                //Artisan::call('config:clear');
+               dd($send);
             }
 
         }
 
-        return responseJson(1, 'تم الاضافة بنجاح', compact('donationRequest'));
+        return responseJson(1, 'تم الاضافة بنجاح', $donationRequest->load('client','city'));
 
     }
 
