@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model 
@@ -49,6 +50,11 @@ class Post extends Model
             $post->where('title','like','%'.$request->keyword.'%');
             $post->orWhere('content','like','%'.$request->keyword.'%');
         });
+    }
+
+    public function scopePublished($query)
+    {
+        $query->where('publish_date','<=',Carbon::now()->toDateString());
     }
 
 }
