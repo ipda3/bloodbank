@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
 class Client extends Authenticatable
 {
@@ -12,7 +13,7 @@ class Client extends Authenticatable
     protected $fillable = array('name', 'email', 'birth_date', 'city_id','blood_type_id', 'phone',
         'password', 'is_active','donation_last_date','pin_code');
     protected $appends = ['can_donate'];
-
+    use HasApiTokens;
 //    public function setPasswordAttribute($value)
 //    {
 //        $this->attributes['password'] = bcrypt($value);

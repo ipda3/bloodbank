@@ -22,11 +22,18 @@ class Post extends Model
     {
         return asset($this->thumbnail);
     }
-
+    // attribute IsFavourite -> is_favourite
+    // $post->is_favourite [ true - false ]
+    // if($post->is_favourite)
     public function getIsFavouriteAttribute()
     {
-        $favourite = $this->whereHas('favourites',function ($query){
-            $query->where('client_post.client_id',request()->user()->id);
+        $user = auth()->guard('client')->user() ?? auth()->guard('api')->user();
+        if (!$user)
+        {
+            return false;
+        }
+        $favourite = $this->whereHas('favourites',function ($query) use($user){
+            $query->where('client_post.client_id',$user->id);
             $query->where('client_post.post_id',$this->id);
         })->first();
         // client

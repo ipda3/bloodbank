@@ -34,15 +34,25 @@ class AuthController extends Controller
             return responseJson(0,$validator->errors()->first(),$validator->errors());
         }
 
+        // 1 auth()->user()  ==> web
+        // 2 Auth::user()
+        // 3 auth()->guard('api')->user()
+        // 4 auth('api')->user()
+        // 5 $request->user()
+
         $request->merge(['password' => bcrypt($request->password)]);
         $client = Client::create($request->all());
         $client->api_token = str_random(60);
         $client->save();
-        $client->governorates()->attach($request->governorate_id);
+        $accessToken = $client->createToken('authToken')->accessToken;
+//        $city = City::find($request->city_id);
+//        $client->governorates()->attach($city->governorate_id);
+        $client->governorates()->attach($client->city->governorate_id);
         $client->bloodtypes()->attach($request->blood_type_id);
         return responseJson(1,'تم الاضافة بنجاح',[
-            'api_token' => $client->api_token,
-            'client' => $client->load('city.governorate','bloodType')
+            'api_token' => $accessToken,
+//            'client' => $client->load('city.governorate','bloodType')
+            'client' => new \App\Http\Resources\Client($client)
         ]);
     }
 
@@ -68,8 +78,9 @@ class AuthController extends Controller
                 {
                     return responseJson(0,'تم حظر حسابك .. اتصل بالادارة');
                 }
+                $accessToken = $client->createToken('authToken')->accessToken;
                 return responseJson(1,'تم تسجيل الدخول',[
-                    'api_token' => $client->api_token,
+                    'api_token' => $accessToken,
                     'client' => $client->load('city.governorate','bloodType')
                 ]);
             }else{
@@ -214,6 +225,7 @@ class AuthController extends Controller
             // 1,2
             // sync (1,3,4)
             // 1,3,4
+
             $request->user()->governorates()->sync($request->governorates); // attach - detach() - toggle() - sync
         }
 

@@ -135,6 +135,17 @@ function getYoutubeId($url)
     return "";
 }
 
+function getPagination($collection)
+{
+    return [
+        'per_page' => $collection->perPage(),
+        'total' => $collection->total(),
+        'current_page' => $collection->currentPage(),
+        'last_page' => $collection->lastPage(),
+        'has_more_pages' => $collection->hasMorePages(),
+    ];
+}
+
 
 function notifyByFirebase($title,$body,$tokens,$data = [])        // paramete 5 =>>>> $type
 {

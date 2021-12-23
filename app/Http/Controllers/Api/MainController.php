@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\CityResource;
 use App\Models\BloodType;
 use App\Models\Category;
 use App\Models\City;
@@ -22,6 +23,21 @@ class MainController extends Controller
 {
     public function posts(Request $request)
     {
+//        $posts = Post::with('category')->query();
+//        if ($request->input('category_id'))
+//        {
+//            $posts = $posts->where('category_id',$request->category_id);
+////                $post->whereHas('category',function($category) use($request){
+////                    $category->where('name','like','%'.$request->keyword.'%');
+////                });
+//        }
+//        if ($request->input('keyword'))
+//        {
+//            // scope
+//            $posts = $posts->searchByKeyword($request);
+//        }
+//
+//        $posts = $posts->latest()->paginate(20);
         //RequestLog::create(['content' => $request->all(), 'service' => 'posts']);
         // with('relation_name')
         // load('city') lazy eager loading
@@ -36,6 +52,7 @@ class MainController extends Controller
             // cat & title || content
             if ($request->input('keyword'))
             {
+                // scope
                 $post->searchByKeyword($request);
             }
 
@@ -116,8 +133,11 @@ class MainController extends Controller
             {
                 $query->where('governorate_id',$request->governorate_id);
             }
-        })->get();
-        return responseJson(1, 'success', $cities);
+        })->paginate(1);
+        return responseJson(1, 'success', [
+            'cities' => CityResource::collection($cities),
+            'pagination' => getPagination($cities)
+            ]);
     }
 
     public function donationRequestCreate(Request $request)
