@@ -37,6 +37,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+
         $rules = [
             'name' => 'required|unique:roles,name',
             'display_name' => 'required',

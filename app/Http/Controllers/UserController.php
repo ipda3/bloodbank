@@ -17,15 +17,15 @@ class UserController extends Controller
 
     public function changePasswordSave(Request $request)
     {
-        $messages = [
+        $rules = [
             'old-password' => 'required',
             'password' => 'required|confirmed',
         ];
-        $rules = [
+        $messages = [
             'old-password.required' => 'كلمة السر الحالية مطلوبة',
             'password.required' => 'كلمة السر مطلوبة',
         ];
-        $this->validate($request,$messages,$rules);
+        $this->validate($request,$rules,$messages);
 
         $user = Auth::user();
 

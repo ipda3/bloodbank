@@ -6,6 +6,7 @@
 <script src="{{asset('adminlte/plugins/jquery-slimscroll/jquery.slimscroll.min.js')}}"></script>
 <!-- FastClick -->
 <script src="{{asset('adminlte/plugins/fastclick/lib/fastclick.js')}}"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('adminlte/js/adminlte.min.js')}}"></script>
 <!-- AdminLTE for demo purposes -->
@@ -19,6 +20,12 @@
     $(document).ready(function () {
         $('.sidebar-menu').tree()
     })
+</script>
+
+<script>
+    $.ready(function () {
+        $('#select2').select2();
+    });
 </script>
 <style>
     .swal2-popup{

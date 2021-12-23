@@ -71,7 +71,7 @@
                  ]) !!}
 
                     <label for="name">عن التطبيق</label>
-                    {!! Form::text('about_app',null,[
+                    {!! Form::textarea('about_app',null,[
                     'class' => 'form-control'
                  ]) !!}
 

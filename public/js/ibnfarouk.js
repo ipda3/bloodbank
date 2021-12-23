@@ -95,3 +95,21 @@ $(document).on('click','.destroy',function(){
 });
 
 
+
+$( ".datepicker" ).datepicker({
+    format: "mm/dd/yy",
+    weekStart: 0,
+    calendarWeeks: true,
+    autoclose: true,
+    todayHighlight: true,
+    rtl: true,
+    orientation: "auto"
+});
+
+$('.select2').select2({
+    dir: "rtl"
+});
+
+
+
+

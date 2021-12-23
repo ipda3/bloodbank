@@ -13,9 +13,16 @@ class CityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $records = City::paginate(20);
+        $records = City::where(function ($q) use ($request) {
+            if ($request->name) {
+                $q->where('name', 'LIKE', '%' . $request->name . '%');
+            }
+            if ($request->governorate_id) {
+                $q->where('governorate_id', $request->input('governorate_id'));
+            }
+        })->paginate(10);
         return view('cities.index', compact('records'));
     }
 
@@ -34,12 +41,13 @@ class CityController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required',
+            'name'           => 'required|unique:cities,name',
             'governorate_id' => 'required'
         ];
         $message = [
-            'name.required' => 'الاسم مطلوب',
-            'governorate_id.required' => 'المحافظة مطلوبة ',
+            'name.required'           => 'الاسم مطلوب',
+            'name.unique'             => 'اسم المدينة مستخدمة من قبل',
+            'governorate_id.required' => 'المحافظة مطلوبة',
         ];
         $this->validate($request, $rules, $message);
         $record = City::create($request->all());
@@ -50,7 +58,7 @@ class CityController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -61,7 +69,7 @@ class CityController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -73,22 +81,22 @@ class CityController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $record = City::findOrFail($id);
-            $record->update($request->all());
-        flash()->success('لقـــد تـــــــم التحــديــــــــث بنــجـــــــاح');
+        $record->update($request->all());
+        flash()->success('تم التحديث بنجاح');
         return redirect(route('cities.index'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -96,17 +104,17 @@ class CityController extends Controller
         $record = City::find($id);
         if (!$record) {
             return response()->json([
-                'status'  => 0,
-                'message' => 'تعذر الحصول على البيانات'
-            ]);
+                                        'status'  => 0,
+                                        'message' => 'تعذر الحصول على البيانات'
+                                    ]);
         }
 
         $record->delete();
         return response()->json([
-                'status'  => 1,
-                'message' => 'تم الحذف بنجاح',
-                'id'      => $id
-            ]);
+                                    'status'  => 1,
+                                    'message' => 'تم الحذف بنجاح',
+                                    'id'      => $id
+                                ]);
     }
 
 }

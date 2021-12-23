@@ -44,12 +44,7 @@ return [
         'api' => [
             'driver' => 'passport',
             'provider' => 'clients',
-        ],
-
-        'client-web' => [
-            'driver' => 'session',
-            'provider' => 'clients',
-        ],
+        ]
     ],
 
     /*
@@ -105,12 +100,7 @@ return [
             'provider' => 'users',
             'table' => 'password_resets',
             'expire' => 60,
-        ],
-        'clients' => [
-            'provider' => 'clients',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ],
+        ]
     ],
 
 ];

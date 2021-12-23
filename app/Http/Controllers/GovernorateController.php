@@ -11,9 +11,11 @@ class GovernorateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $records = Governorate::paginate(20);
+        $records = Governorate::where(function ($q)use($request){
+            $q->where('name','LIKE', '%' . $request->name . '%');
+        })->paginate(10);
         return view('governorates.index',compact('records'));
     }
 
@@ -31,10 +33,11 @@ class GovernorateController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => 'required'
+            'name' => 'required|unique:governorates,name'
         ];
         $messages = [
-            'name.required' => 'Name is Required'
+            'name.required' => 'اسم المحافظة مطلوب',
+            'name.unique' => 'هذا الاسم مستخدم بالفعل',
         ];
         $this->validate($request,$rules,$messages);
 
@@ -44,7 +47,7 @@ class GovernorateController extends Controller
 
         $record = Governorate::create($request->all());
 
-        flash()->success("تم الإضافة");
+        flash()->success("تم إضافة المدينة بنجاح");
         return redirect(route('governorates.index'));
     }
 
@@ -82,8 +85,8 @@ class GovernorateController extends Controller
     {
         $record = Governorate::findOrFail($id);
         $record->update($request->all());
-        flash()->success("تم التعديل");
-        return redirect(route('governorate.index'));
+        flash()->success("تم تعديل المدينة بنجاح");
+        return redirect(route('governorates.index'));
     }
 
     /**
